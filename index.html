@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+<title>Portofolio Pancasila</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #17241C;
+    --sawah: #3F6B4A;
+    --sawah-light: #6E9B78;
+    --mist: #E8ECE1;
+    --cloud: #F6F3EA;
+    --gold: #B9924A;
+    --gold-soft: #D8C08B;
+    --merah: #8C3A32;
+
+    --font-display: "Anton", sans-serif;
+    --font-body: "Plus Jakarta Sans", sans-serif;
+    --font-quote: "Playfair Display", Georgia, serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    font-family: var(--font-body);
+    background: var(--cloud);
+    color: var(--ink);
+    overflow-x:hidden;
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---------- NAVBAR ---------- */
+  .navbar{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 26px clamp(24px, 5vw, 64px);
+    transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .navbar.scrolled{
+    background: rgba(23, 36, 28, 0.92);
+    backdrop-filter: blur(10px);
+    padding: 16px clamp(24px, 5vw, 64px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .brand-logo{
+    height: 60px;
+    width:auto;
+    display:block;
+  }
+
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap: clamp(20px, 3vw, 42px);
+    list-style:none;
+  }
+
+  .nav-links > li{
+    position:relative;
+  }
+
+  .nav-links a, .nav-trigger{
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--cloud);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding: 6px 2px;
+    position:relative;
+    background:none;
+    border:none;
+    font-family: var(--font-body);
+  }
+
+  .nav-links a::after, .nav-trigger::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:-2px;
+    width:0%;
+    height:2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover::after, .nav-item.open .nav-trigger::after{
+    width:100%;
+  }
+
+  .chevron{
+    width:9px; height:9px;
+    border-right:2px solid currentColor;
+    border-bottom:2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.3s ease;
+    margin-left:2px;
+  }
+
+  .nav-item.open .chevron{
+    transform: rotate(225deg) translateY(2px);
+  }
+
+  .dropdown{
+    position:absolute;
+    top: calc(100% + 18px);
+    left:50%;
+    transform: translateX(-50%) translateY(-8px);
+    min-width: 240px;
+    background: var(--ink);
+    border: 1px solid rgba(185,146,74,0.25);
+    border-radius: 10px;
+    padding: 10px;
+    opacity:0;
+    visibility:hidden;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  }
+
+  .nav-item.open .dropdown{
+    opacity:1;
+    visibility:visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .dropdown a{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding: 11px 14px;
+    border-radius:7px;
+    font-size:14px;
+    font-weight:500;
+    color: var(--mist);
+    transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .dropdown a::after{ content:none; }
+
+  .dropdown a:hover{
+    background: rgba(185,146,74,0.12);
+    color: var(--gold-soft);
+    padding-left: 18px;
+  }
+
+  .sila-num{
+    font-family: var(--font-display);
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    flex-shrink:0;
+    width: 20px;
+  }
+
+  /* ---------- MOBILE MENU ---------- */
+  .hamburger{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    width:34px;
+    height:34px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    z-index:210;
+  }
+
+  .hamburger span{
+    display:block;
+    width:100%;
+    height:2px;
+    background: var(--cloud);
+    border-radius:2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .hamburger.active span:nth-child(1){ transform: translateY(8px) rotate(45deg); }
+  .hamburger.active span:nth-child(2){ opacity:0; }
+  .hamburger.active span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
+
+  .mobile-overlay{
+    position:fixed;
+    inset:0;
+    background: rgba(15,22,16,0.55);
+    backdrop-filter: blur(2px);
+    opacity:0;
+    visibility:hidden;
+    transition: opacity 0.35s ease, visibility 0.35s;
+    z-index:190;
+  }
+
+  .mobile-overlay.active{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .mobile-drawer{
+    position:fixed;
+    top:0; right:0;
+    height:100%;
+    width:min(320px, 82vw);
+    background: var(--ink);
+    z-index:200;
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.35);
+    display:flex;
+    flex-direction:column;
+    padding: 24px 22px 32px;
+    overflow-y:auto;
+  }
+
+  .mobile-drawer.active{
+    transform: translateX(0);
+  }
+
+  .mobile-drawer-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:28px;
+  }
+
+  .mobile-close{
+    background:none;
+    border:none;
+    color: var(--cloud);
+    font-size:30px;
+    line-height:1;
+    cursor:pointer;
+    padding:2px 6px;
+  }
+
+  .mobile-links{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .mobile-link{
+    color: var(--cloud);
+    font-family: var(--font-body);
+    font-weight:600;
+    font-size:16px;
+    padding:15px 4px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+
+  .mobile-accordion-trigger{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    background:none;
+    border:none;
+    text-align:left;
+    color: var(--cloud);
+    font-family: var(--font-body);
+    font-weight:600;
+    font-size:16px;
+    padding:15px 4px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    cursor:pointer;
+  }
+
+  .mobile-accordion-trigger .chevron{
+    transition: transform 0.3s ease;
+  }
+
+  .mobile-accordion-trigger.open .chevron{
+    transform: rotate(225deg);
+  }
+
+  .mobile-accordion{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height 0.4s ease;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .mobile-accordion.open{
+    max-height:420px;
+  }
+
+  .mobile-sublink{
+    color: var(--mist);
+    font-size:14px;
+    padding:11px 4px 11px 16px;
+    display:flex;
+    gap:10px;
+    align-items:baseline;
+  }
+
+  .mobile-sublink:hover{
+    color: var(--gold-soft);
+  }
+
+  @media (max-width: 860px){
+    .hamburger{ display:flex; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    height: 100svh;
+    min-height: 620px;
+    width:100%;
+    overflow:hidden;
+    background: var(--ink);
+  }
+
+  .hero-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position: 50% 38%;
+    filter: saturate(0.95) brightness(0.92) blur(1.5px);
+    transform: scale(1.05);
+  }
+
+  .hero-tint{
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg, rgba(17,26,19,0.28) 0%, rgba(23,36,28,0.06) 32%, rgba(23,36,28,0.16) 62%, rgba(15,22,16,0.55) 88%, rgba(23,36,28,0.97) 100%),
+      linear-gradient(90deg, rgba(185,146,74,0.08), rgba(63,107,74,0.10));
+    mix-blend-mode: multiply;
+  }
+
+  /* --- animated gradient mesh over the mountain photo only --- */
+  .hero-mesh{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:hidden;
+    pointer-events:none;
+    mix-blend-mode: multiply;
+    opacity:0.9;
+  }
+
+  .hero-mesh-blob{
+    position:absolute;
+    border-radius:50%;
+    filter: blur(75px);
+    will-change: transform;
+  }
+
+  .hero-mesh-blob-1{
+    width:54vw; height:54vw;
+    top:12%; left:-12%;
+    background: radial-gradient(circle, rgba(8,14,10,0.85), transparent 68%);
+    filter: blur(85px);
+    animation: meshDrift1 28s ease-in-out infinite alternate;
+  }
+
+  .hero-mesh-blob-2{
+    width:48vw; height:48vw;
+    top:14%; right:-14%;
+    background: radial-gradient(circle, rgba(16,38,24,0.8), transparent 68%);
+    animation: meshDrift2 32s ease-in-out infinite alternate;
+  }
+
+  .hero-mesh-blob-3{
+    width:42vw; height:42vw;
+    bottom:-18%; left:18%;
+    background: radial-gradient(circle, rgba(10,12,16,0.75), transparent 68%);
+    animation: meshDrift3 36s ease-in-out infinite alternate;
+  }
+
+  .hero-mesh-blob-4{
+    width:38vw; height:38vw;
+    bottom:2%; right:16%;
+    background: radial-gradient(circle, rgba(60,48,28,0.55), transparent 68%);
+    animation: meshDrift4 24s ease-in-out infinite alternate;
+  }
+
+  @keyframes meshDrift1{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(6vw, 4vh) scale(1.15); }
+  }
+  @keyframes meshDrift2{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(-5vw, 6vh) scale(1.1); }
+  }
+  @keyframes meshDrift3{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(4vw, -5vh) scale(1.2); }
+  }
+  @keyframes meshDrift4{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(-4vw, -4vh) scale(1.12); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-mesh-blob{ animation: none; }
+  }
+
+  /* --- drifting fog/mist wisps --- */
+  .hero-fog{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:hidden;
+    pointer-events:none;
+    mix-blend-mode: screen;
+    opacity:1;
+  }
+
+  .fog-wisp{
+    position:absolute;
+    border-radius:50%;
+    background: radial-gradient(ellipse, rgba(232,236,225,0.9), transparent 70%);
+    filter: blur(65px);
+    will-change: transform;
+  }
+
+  .fog-wisp-1{
+    width:70vw; height:18vw;
+    top:8%; left:-45%;
+    animation: fogDrift1 46s linear infinite;
+  }
+
+  .fog-wisp-2{
+    width:58vw; height:14vw;
+    top:38%; left:-35%;
+    opacity:1;
+    animation: fogDrift2 58s linear infinite;
+  }
+
+  .fog-wisp-3{
+    width:82vw; height:20vw;
+    top:64%; left:-55%;
+    opacity:0.9;
+    animation: fogDrift3 68s linear infinite;
+  }
+
+  .fog-wisp-4{
+    width:54vw; height:12vw;
+    top:84%; left:-38%;
+    opacity:0.8;
+    animation: fogDrift4 52s linear infinite;
+  }
+
+  @keyframes fogDrift1{
+    0%{   transform: translate(0,0) scale(1);        opacity:0.7; }
+    25%{  transform: translate(35vw,-2vh) scale(1.06); opacity:1; }
+    50%{  transform: translate(72vw,1vh) scale(1);     opacity:0.85; }
+    75%{  transform: translate(108vw,-1.5vh) scale(1.08); opacity:1; }
+    100%{ transform: translate(145vw,0) scale(1);      opacity:0.7; }
+  }
+
+  @keyframes fogDrift2{
+    0%{   transform: translate(0,0) scale(1);        opacity:0.7; }
+    30%{  transform: translate(40vw,2vh) scale(1.05); opacity:1; }
+    60%{  transform: translate(85vw,-1.5vh) scale(1); opacity:0.85; }
+    100%{ transform: translate(140vw,1vh) scale(1.08); opacity:0.7; }
+  }
+
+  @keyframes fogDrift3{
+    0%{   transform: translate(0,0) scale(1);         opacity:0.6; }
+    35%{  transform: translate(45vw,-1.5vh) scale(1.08); opacity:0.9; }
+    70%{  transform: translate(95vw,1.5vh) scale(1);   opacity:0.75; }
+    100%{ transform: translate(150vw,-1vh) scale(1.05); opacity:0.6; }
+  }
+
+  @keyframes fogDrift4{
+    0%{   transform: translate(0,0) scale(1);       opacity:0.55; }
+    40%{  transform: translate(38vw,1.5vh) scale(1.06); opacity:0.85; }
+    75%{  transform: translate(80vw,-1vh) scale(1);  opacity:0.7; }
+    100%{ transform: translate(135vw,1vh) scale(1.07); opacity:0.55; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .fog-wisp{ animation: none; }
+  }
+
+  .hero-text{
+    position:absolute;
+    left: 50%;
+    top: 52%;
+    transform: translate(-50%, -50%);
+    z-index:2;
+    max-width: 90%;
+    text-align: center;
+    font-family: var(--font-display);
+    color: var(--cloud);
+    line-height: 0.9;
+    text-shadow: 0 8px 40px rgba(0,0,0,0.35);
+    pointer-events:none;
+    animation: heroFloat 6s ease-in-out infinite;
+    animation-delay: 1.2s;
+  }
+
+  @keyframes heroFloat{
+    0%, 100%{ transform: translate(-50%, -50%) translateY(0); }
+    50%{ transform: translate(-50%, -50%) translateY(-16px); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-text{ animation: none; }
+  }
+
+  /* ---------- GLOWING CURSOR ---------- */
+  .cursor-glow{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:280px;
+    height:280px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(216,192,139,0.55) 0%, rgba(216,192,139,0.18) 42%, transparent 72%);
+    filter: blur(4px);
+    mix-blend-mode: screen;
+    pointer-events:none;
+    z-index:9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    opacity:0;
+    transition: opacity 0.35s ease;
+  }
+
+  .cursor-glow.active{
+    opacity:1;
+  }
+
+  .cursor-dot{
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background: var(--gold-soft);
+    pointer-events:none;
+    z-index:10000;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+    opacity:0;
+    transition: opacity 0.35s ease;
+  }
+
+  .cursor-dot.active{
+    opacity:1;
+  }
+
+  @media (hover: hover) and (pointer: fine){
+    body{ cursor:none; }
+    a, button{ cursor:none; }
+    .cursor-glow, .cursor-dot{ display:block; }
+  }
+
+  .hero-text .line{
+    display:block;
+    font-size: clamp(44px, min(12.5vw, 15vh), 160px);
+    letter-spacing: 0.01em;
+    opacity: 0;
+    transform: translateY(70px);
+    animation: heroLineUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .hero-text .line:nth-of-type(1){ animation-delay: 0.25s; }
+  .hero-text .line:nth-of-type(2){ animation-delay: 0.45s; }
+
+  @keyframes heroLineUp{
+    to{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-text .line{
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hero-text .line.gold{
+    color: var(--gold-soft);
+    -webkit-text-stroke: 1px rgba(23,36,28,0.25);
+  }
+
+  .hero-cutout-wrap{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    z-index:3;
+    width:100%;
+    height: 100%;
+    pointer-events:none;
+    overflow:hidden;
+  }
+
+  .hero-cutout{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  .hero-eyebrow{
+    position:absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index:2;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    gap:12px;
+    color: var(--mist);
+    font-size: clamp(11px, 1.3vw, 15px);
+    letter-spacing:0.28em;
+    font-weight:600;
+    text-transform:uppercase;
+    opacity:0.85;
+  }
+
+  .eyebrow-line{
+    width:36px; height:1px;
+    background: var(--gold);
+  }
+
+  .hero-eyebrow > span{
+    opacity: 0;
+    transform: translateY(14px);
+    animation: eyebrowUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .hero-eyebrow > span:nth-child(1){ animation-delay: 0s;    }
+  .hero-eyebrow > span:nth-child(2){ animation-delay: 0.25s; }
+  .hero-eyebrow > span:nth-child(3){ animation-delay: 0.75s; }
+  .hero-eyebrow > span:nth-child(4){ animation-delay: 0.95s; }
+  .hero-eyebrow > span:nth-child(5){ animation-delay: 1.45s; }
+  .hero-eyebrow > span:nth-child(6){ animation-delay: 1.65s; }
+  .hero-eyebrow > span:nth-child(7){ animation-delay: 2.15s; }
+
+  @keyframes eyebrowUp{
+    to{
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-eyebrow > span{
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom: 28px;
+    left:50%;
+    transform: translateX(-50%);
+    z-index:4;
+    color: var(--mist);
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    opacity:0.75;
+  }
+
+  .scroll-line{
+    width:1px; height:34px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    animation: scrollpulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scrollpulse{
+    0%{ transform: scaleY(0.4); opacity:0.4; transform-origin:top; }
+    50%{ transform: scaleY(1); opacity:1; transform-origin:top; }
+    100%{ transform: scaleY(0.4); opacity:0.4; transform-origin:top; }
+  }
+
+  /* ---------- ABOUT / PROFILE SECTION ---------- */
+  .intro{
+    position:relative;
+    background: var(--cloud);
+    padding: 90px 0 110px;
+    overflow:hidden;
+  }
+
+  .intro-bg{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+
+  .intro-blob{
+    position:absolute;
+    border-radius:50%;
+    filter: blur(90px);
+    will-change: transform;
+  }
+
+  .intro-blob-1{
+    width:46vw; height:46vw;
+    top:-14%; left:-10%;
+    background: radial-gradient(circle, rgba(185,146,74,0.22), transparent 70%);
+    animation: introBlobDrift1 30s ease-in-out infinite alternate;
+  }
+
+  .intro-blob-2{
+    width:40vw; height:40vw;
+    top:30%; right:-12%;
+    background: radial-gradient(circle, rgba(63,107,74,0.18), transparent 70%);
+    animation: introBlobDrift2 34s ease-in-out infinite alternate;
+  }
+
+  .intro-blob-3{
+    width:36vw; height:36vw;
+    bottom:-16%; left:28%;
+    background: radial-gradient(circle, rgba(140,58,50,0.12), transparent 70%);
+    animation: introBlobDrift3 38s ease-in-out infinite alternate;
+  }
+
+  @keyframes introBlobDrift1{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(5vw, 4vh) scale(1.12); }
+  }
+  @keyframes introBlobDrift2{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(-4vw, 5vh) scale(1.08); }
+  }
+  @keyframes introBlobDrift3{
+    from{ transform: translate(0,0) scale(1); }
+    to{ transform: translate(3vw, -4vh) scale(1.15); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .intro-blob{ animation:none; }
+  }
+
+  /* --- modern morphing organic blob shapes, green accent --- */
+  .morph-blob{
+    position:absolute;
+    background: linear-gradient(135deg, rgba(63,107,74,0.28), rgba(110,155,120,0.14) 60%, transparent 100%);
+    filter: blur(45px);
+  }
+
+  .morph-blob-1{
+    width:36vw;
+    height:36vw;
+    top:2%;
+    right:4%;
+    animation: morphShift1 16s ease-in-out infinite, morphSpin1 42s linear infinite;
+  }
+
+  .morph-blob-2{
+    width:26vw;
+    height:26vw;
+    bottom:-4%;
+    left:2%;
+    background: linear-gradient(135deg, rgba(110,155,120,0.24), rgba(63,107,74,0.1) 60%, transparent 100%);
+    animation: morphShift2 20s ease-in-out infinite, morphSpin2 50s linear infinite reverse;
+  }
+
+  @keyframes morphShift1{
+    0%, 100%{ border-radius: 42% 58% 65% 35% / 45% 45% 55% 55%; }
+    25%{      border-radius: 58% 42% 35% 65% / 55% 65% 35% 45%; }
+    50%{      border-radius: 65% 35% 42% 58% / 35% 55% 45% 65%; }
+    75%{      border-radius: 35% 65% 58% 42% / 65% 35% 65% 35%; }
+  }
+
+  @keyframes morphShift2{
+    0%, 100%{ border-radius: 55% 45% 38% 62% / 50% 40% 60% 50%; }
+    33%{      border-radius: 38% 62% 55% 45% / 62% 55% 45% 38%; }
+    66%{      border-radius: 62% 38% 45% 55% / 45% 62% 38% 55%; }
+  }
+
+  @keyframes morphSpin1{
+    from{ transform: rotate(0deg); }
+    to{ transform: rotate(360deg); }
+  }
+
+  @keyframes morphSpin2{
+    from{ transform: rotate(0deg); }
+    to{ transform: rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .morph-blob{ animation:none; }
+  }
+
+  .intro > .carousel-outer,
+  .intro > .intro-content{
+    position:relative;
+    z-index:1;
+  }
+
+  /* --- 3D auto-scrolling carousel --- */
+  .carousel-outer{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    padding: 30px clamp(48px, 14vw, 200px) 70px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  }
+
+  .carousel-track{
+    display:flex;
+    align-items:center;
+    gap: 34px;
+    width: max-content;
+    animation: carouselScroll 60s linear infinite;
+  }
+
+  .carousel-outer:hover .carousel-track{
+    animation-play-state: paused;
+  }
+
+  .carousel-track img{
+    display:block;
+    flex-shrink:0;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow:
+      0 30px 50px -18px rgba(23,36,28,0.4),
+      0 12px 22px -6px rgba(23,36,28,0.22);
+    filter: brightness(1);
+    transition: filter 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .carousel-track img:hover{
+    filter: brightness(1.08);
+    box-shadow:
+      0 36px 60px -16px rgba(23,36,28,0.5),
+      0 16px 28px -6px rgba(185,146,74,0.35);
+  }
+
+  @keyframes carouselScroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .carousel-track{ animation: none; }
+  }
+
+  .cs-1{ width:440px; height:290px; }
+  .cs-2{ width:500px; height:330px; }
+  .cs-3{ width:470px; height:310px; }
+  .cs-4{ width:520px; height:350px; }
+
+  .lift-up{
+    animation: imgBobUp 5.5s ease-in-out infinite;
+  }
+  .lift-down{
+    animation: imgBobDown 6s ease-in-out infinite;
+  }
+
+  @keyframes imgBobUp{
+    0%, 100%{ transform: translateY(-18px) rotate(-1.3deg); }
+    50%{ transform: translateY(-32px) rotate(-1.3deg); }
+  }
+
+  @keyframes imgBobDown{
+    0%, 100%{ transform: translateY(18px) rotate(1.1deg); }
+    50%{ transform: translateY(32px) rotate(1.1deg); }
+  }
+
+  .carousel-track img:nth-child(1){ animation-delay: 0s; }
+  .carousel-track img:nth-child(2){ animation-delay: 0.6s; }
+  .carousel-track img:nth-child(3){ animation-delay: 1.2s; }
+  .carousel-track img:nth-child(4){ animation-delay: 1.8s; }
+  .carousel-track img:nth-child(5){ animation-delay: 2.4s; }
+  .carousel-track img:nth-child(6){ animation-delay: 3s; }
+  .carousel-track img:nth-child(7){ animation-delay: 3.6s; }
+  .carousel-track img:nth-child(8){ animation-delay: 4.2s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .lift-up, .lift-down{ animation: none; }
+  }
+
+  /* --- text content below carousel --- */
+  .intro-content{
+    padding: 20px clamp(24px, 8vw, 120px) 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .intro-label{
+    font-size:13px;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color: var(--sawah);
+    font-weight:700;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+  }
+
+  .intro-label .eyebrow-line{ background: var(--sawah); }
+
+  .intro-content h2{
+    font-family: var(--font-display);
+    font-size: clamp(30px, 3.6vw, 46px);
+    color: var(--ink);
+    line-height:1.15;
+    margin-top:18px;
+    letter-spacing:0.01em;
+  }
+
+  .intro-content p{
+    font-size:16px;
+    line-height:1.75;
+    color:#465046;
+    max-width: 100ch;
+    margin: 18px auto 0;
+    text-align: justify;
+    text-align-last: center;
+  }
+
+  @media (max-width: 860px){
+    .navbar .nav-links{ display:none; }
+    .hero-text{ top:32%; }
+    .hero-eyebrow{ font-size:11px; letter-spacing:0.2em; }
+  }
+
+  /* --- scroll-triggered reveal, same push-up-and-fade language as the hero --- */
+  .reveal{
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1{ transition-delay: 0.05s; }
+  .reveal-delay-2{ transition-delay: 0.25s; }
+  .reveal-delay-3{ transition-delay: 0.45s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* ---------- QUOTE SECTION ---------- */
+  .quote-section{
+    position:relative;
+    background: var(--ink);
+    min-height: 140svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 100px clamp(24px, 8vw, 140px);
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .quote-glow{
+    position:absolute;
+    border-radius:50%;
+    filter: blur(90px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .quote-glow-1{
+    width: 620px;
+    height: 620px;
+    top: 8%;
+    left: -8%;
+    background: radial-gradient(circle, rgba(185,146,74,0.28), transparent 70%);
+    animation: glowDrift1 22s ease-in-out infinite alternate;
+  }
+
+  .quote-glow-2{
+    width: 700px;
+    height: 700px;
+    bottom: 6%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(110,155,120,0.22), transparent 70%);
+    animation: glowDrift2 26s ease-in-out infinite alternate;
+  }
+
+  @keyframes glowDrift1{
+    from{ transform: translate(0, 0) scale(1); }
+    to{ transform: translate(60px, 40px) scale(1.15); }
+  }
+
+  @keyframes glowDrift2{
+    from{ transform: translate(0, 0) scale(1); }
+    to{ transform: translate(-50px, -50px) scale(1.1); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .quote-glow{ animation: none; }
+  }
+
+  .quote-particles{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .quote-particle{
+    position:absolute;
+    bottom:-10px;
+    border-radius:50%;
+    opacity:0;
+    animation-name: particleRise;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes particleRise{
+    0%{ transform: translateY(0) translateX(0); opacity:0; }
+    12%{ opacity: var(--p-opacity, 0.55); }
+    88%{ opacity: var(--p-opacity, 0.55); }
+    100%{ transform: translateY(-125vh) translateX(var(--p-drift, 20px)); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .quote-particle{ animation: none; opacity:0; }
+  }
+
+  .quote-section .reveal{
+    transform: translateY(60px);
+  }
+
+  .quote-section .reveal.is-visible{
+    transform: translateY(0);
+  }
+
+  .quote-inner{
+    position:relative;
+    z-index:1;
+    transform: translateY(-8vh);
+  }
+
+  .quote-section::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height: 160px;
+    background: linear-gradient(180deg,
+      rgba(23,36,28,1) 0%,
+      rgba(23,36,28,0.75) 25%,
+      rgba(23,36,28,0.4) 55%,
+      rgba(23,36,28,0.12) 82%,
+      rgba(23,36,28,0) 100%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .quote-section::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height: 420px;
+    background: linear-gradient(180deg,
+      rgba(246,243,234,0) 0%,
+      rgba(246,243,234,0.12) 30%,
+      rgba(246,243,234,0.42) 58%,
+      rgba(246,243,234,0.78) 82%,
+      rgba(246,243,234,1) 100%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .quote-mark{
+    width:14px; height:14px;
+    margin: 0 auto 40px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .quote-text{
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-weight: 600;
+    color: var(--cloud);
+    font-size: clamp(38px, 7.2vw, 120px);
+    line-height: 1.15;
+    max-width: 1300px;
+    margin: 0 auto;
+    letter-spacing: 0.002em;
+  }
+
+  .quote-cite{
+    display:block;
+    margin-top: 44px;
+    color: var(--gold-soft);
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .site-footer{
+    background: var(--ink);
+    color: var(--mist);
+    padding: 74px clamp(24px, 6vw, 100px) 30px;
+  }
+
+  .footer-top{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:48px;
+    padding-bottom:44px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-brand{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    max-width:320px;
+  }
+
+  .footer-brand-logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .footer-brand-logo img{
+    height:46px;
+    width:auto;
+  }
+
+  .footer-brand p{
+    font-size:13.5px;
+    line-height:1.7;
+    color: var(--mist);
+    opacity:0.75;
+  }
+
+  .footer-cols{
+    display:flex;
+    gap: clamp(32px, 6vw, 80px);
+    flex-wrap:wrap;
+  }
+
+  .footer-col h4{
+    font-family: var(--font-body);
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color: var(--gold-soft);
+    margin-bottom:16px;
+    font-weight:700;
+  }
+
+  .footer-col a{
+    display:block;
+    font-size:14px;
+    color: var(--mist);
+    padding:6px 0;
+    opacity:0.85;
+    transition: color 0.2s ease, opacity 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .footer-col a:hover{
+    color: var(--gold-soft);
+    opacity:1;
+    padding-left:4px;
+  }
+
+  .footer-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    padding-top:26px;
+    font-size:12.5px;
+    opacity:0.6;
+  }
+
+  @media (max-width: 640px){
+    .footer-top{ flex-direction:column; }
+    .footer-bottom{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="brand"><img class="brand-logo" src="img/logo.png" alt="Portofolio Pancasila"></div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#profile">Profile</a></li>
+      <li class="nav-item" id="kegiatanItem">
+        <button class="nav-trigger" id="kegiatanTrigger">
+          Kegiatan Pancasila <span class="chevron"></span>
+        </button>
+        <div class="dropdown">
+          <a href="sila-1.html"><span class="sila-num">I</span> Ketuhanan Yang Maha Esa</a>
+          <a href="sila-2.html"><span class="sila-num">II</span> Kemanusiaan yang Adil dan Beradab</a>
+          <a href="sila-3.html"><span class="sila-num">III</span> Persatuan Indonesia</a>
+          <a href="sila-4.html"><span class="sila-num">IV</span> Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan</a>
+          <a href="sila-5.html"><span class="sila-num">V</span> Keadilan Sosial bagi Seluruh Rakyat Indonesia</a>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <img class="brand-logo" src="img/logo.png" alt="Portofolio Pancasila" style="height:38px;">
+      <button class="mobile-close" id="mobileCloseBtn" aria-label="Tutup menu">&times;</button>
+    </div>
+    <nav class="mobile-links">
+      <a href="#home" class="mobile-link">Home</a>
+      <a href="#profile" class="mobile-link">Profile</a>
+      <button class="mobile-accordion-trigger" id="mobileKegiatanTrigger">
+        Kegiatan Pancasila <span class="chevron"></span>
+      </button>
+      <div class="mobile-accordion" id="mobileKegiatanPanel">
+        <a href="sila-1.html" class="mobile-sublink"><span class="sila-num">I</span> Ketuhanan Yang Maha Esa</a>
+        <a href="sila-2.html" class="mobile-sublink"><span class="sila-num">II</span> Kemanusiaan yang Adil dan Beradab</a>
+        <a href="sila-3.html" class="mobile-sublink"><span class="sila-num">III</span> Persatuan Indonesia</a>
+        <a href="sila-4.html" class="mobile-sublink"><span class="sila-num">IV</span> Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan</a>
+        <a href="sila-5.html" class="mobile-sublink"><span class="sila-num">V</span> Keadilan Sosial bagi Seluruh Rakyat Indonesia</a>
+      </div>
+    </nav>
+  </aside>
+
+  <section class="hero" id="home">
+    <img class="hero-bg" src="img/mountain.jpg" alt="Pegunungan dan sawah terasering di Indonesia">
+    <div class="hero-tint"></div>
+    <div class="hero-mesh">
+      <div class="hero-mesh-blob hero-mesh-blob-1"></div>
+      <div class="hero-mesh-blob hero-mesh-blob-2"></div>
+      <div class="hero-mesh-blob hero-mesh-blob-3"></div>
+      <div class="hero-mesh-blob hero-mesh-blob-4"></div>
+    </div>
+    <div class="hero-fog">
+      <div class="fog-wisp fog-wisp-1"></div>
+      <div class="fog-wisp fog-wisp-2"></div>
+      <div class="fog-wisp fog-wisp-3"></div>
+      <div class="fog-wisp fog-wisp-4"></div>
+    </div>
+
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      <span class="eyebrow-word">Satu Nusa</span>
+      <span class="eyebrow-dot">&nbsp;·&nbsp;</span>
+      <span class="eyebrow-word">Satu Bangsa</span>
+      <span class="eyebrow-dot">&nbsp;·&nbsp;</span>
+      <span class="eyebrow-word">Satu Bahasa</span>
+      <span class="eyebrow-line"></span>
+    </div>
+
+    <div class="hero-text">
+      <span class="line">PORTOFOLIO</span>
+      <span class="line gold">PANCASILA</span>
+    </div>
+
+    <div class="hero-cutout-wrap">
+      <img class="hero-cutout" src="img/mountain-cutout.png" alt="Sawah terasering dengan gunung">
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <div class="quote-glow quote-glow-1"></div>
+    <div class="quote-glow quote-glow-2"></div>
+    <div class="quote-particles" id="quoteParticles"></div>
+    <div class="quote-inner">
+      <div class="quote-mark reveal reveal-delay-1"></div>
+      <p class="quote-text reveal reveal-delay-2">
+        &ldquo;Bhineka Tunggal Ika Ita Hana Dharma Mangrwa&rdquo;
+      </p>
+      <cite class="quote-cite reveal reveal-delay-3">— Mpu Tantular</cite>
+    </div>
+  </section>
+
+  <section class="intro" id="profile">
+
+    <div class="intro-bg">
+      <div class="intro-blob intro-blob-1"></div>
+      <div class="intro-blob intro-blob-2"></div>
+      <div class="intro-blob intro-blob-3"></div>
+      <div class="morph-blob morph-blob-1"></div>
+      <div class="morph-blob morph-blob-2"></div>
+    </div>
+
+    <div class="carousel-outer reveal">
+      <div class="carousel-track">
+        <img class="cs-1 lift-up"   src="img/gotongroyong1.jpg" alt="Gotong royong makan bersama di sawah">
+        <img class="cs-2 lift-down" src="img/gotongroyong2.jpg" alt="Pengrajin batik bekerja sama">
+        <img class="cs-3 lift-up"   src="img/gotongroyong3.jpg" alt="Kakek mengajari cucu belajar">
+        <img class="cs-4 lift-down" src="img/gotongroyong4.jpg" alt="Petani beristirahat bersama">
+        <img class="cs-2 lift-up"   src="img/gotongroyong5.jpg" alt="Diskusi kolaborasi UX Indonesia">
+        <img class="cs-3 lift-down" src="img/gotongroyong6.jpg" alt="Guru bersama murid di kelas">
+        <img class="cs-1 lift-down" src="img/gotongroyong7.jpg" alt="Kegiatan belajar menenun bersama">
+        <img class="cs-4 lift-up"   src="img/gotongroyong8.jpg" alt="Perayaan kelulusan bersama teman">
+
+        <img class="cs-1 lift-up"   src="img/gotongroyong1.jpg" alt="" aria-hidden="true">
+        <img class="cs-2 lift-down" src="img/gotongroyong2.jpg" alt="" aria-hidden="true">
+        <img class="cs-3 lift-up"   src="img/gotongroyong3.jpg" alt="" aria-hidden="true">
+        <img class="cs-4 lift-down" src="img/gotongroyong4.jpg" alt="" aria-hidden="true">
+        <img class="cs-2 lift-up"   src="img/gotongroyong5.jpg" alt="" aria-hidden="true">
+        <img class="cs-3 lift-down" src="img/gotongroyong6.jpg" alt="" aria-hidden="true">
+        <img class="cs-1 lift-down" src="img/gotongroyong7.jpg" alt="" aria-hidden="true">
+        <img class="cs-4 lift-up"   src="img/gotongroyong8.jpg" alt="" aria-hidden="true">
+      </div>
+    </div>
+
+    <div class="intro-content">
+      <div class="intro-label reveal reveal-delay-1"><span class="eyebrow-line"></span> Tentang</div>
+      <div>
+        <h2 class="reveal reveal-delay-2">Penerapan Pancasila dalam Kehidupan Masyarakat</h2>
+        <p class="reveal reveal-delay-3">
+          Indonesia hidup mendasari prinsip gotong royong, alias bekerja sama warga lain
+          untuk kepentingan bersama. Tali persaudaraan ini menjadi khas kepribadian warga
+          Indonesia dan dapat wujud dalam berbagai bentuk pada kehidupan sehari-hari kita.
+          Nilai kooperatif tersebut dituangkan ke ideologi bangsa, yaitu Pancasila. Tiap
+          sila mendalami nilai kebersamaan dari sudut yang berbeda. Kelima nilai ini saling
+          melengkapi dan menjadi fondasi bagaimana kami hidup berdampingan, saling membantu,
+          dan membangun bangsa bersama-sama.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <img src="img/logo.png" alt="Portofolio Pancasila">
+        </div>
+        <p>
+          Portofolio Pancasila — menghimpun kegiatan dan refleksi penerapan
+          lima sila Pancasila dalam kehidupan sehari-hari.
+        </p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Navigasi</h4>
+          <a href="index.html#home">Home</a>
+          <a href="profile.html">Profile</a>
+          <a href="sila-1.html">Kegiatan Pancasila</a>
+        </div>
+        <div class="footer-col">
+          <h4>Sila Pancasila</h4>
+          <a href="sila-1.html">Sila I</a>
+          <a href="sila-2.html">Sila II</a>
+          <a href="sila-3.html">Sila III</a>
+          <a href="sila-4.html">Sila IV</a>
+          <a href="sila-5.html">Sila V</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Portofolio Pancasila — Kelompok Satu</span>
+      <span>Dibuat dengan semangat gotong royong</span>
+    </div>
+  </footer>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const kegiatanItem = document.getElementById('kegiatanItem');
+    const kegiatanTrigger = document.getElementById('kegiatanTrigger');
+
+    kegiatanTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      kegiatanItem.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if(!kegiatanItem.contains(e.target)){
+        kegiatanItem.classList.remove('open');
+      }
+    });
+
+    // mobile hamburger drawer
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileKegiatanTrigger = document.getElementById('mobileKegiatanTrigger');
+    const mobileKegiatanPanel = document.getElementById('mobileKegiatanPanel');
+
+    function openMobileMenu(){
+      mobileDrawer.classList.add('active');
+      mobileOverlay.classList.add('active');
+      hamburgerBtn.classList.add('active');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu(){
+      mobileDrawer.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      hamburgerBtn.classList.remove('active');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', () => {
+      if (mobileDrawer.classList.contains('active')) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    });
+
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+    mobileCloseBtn.addEventListener('click', closeMobileMenu);
+
+    mobileKegiatanTrigger.addEventListener('click', () => {
+      mobileKegiatanTrigger.classList.toggle('open');
+      mobileKegiatanPanel.classList.toggle('open');
+    });
+
+    document.querySelectorAll('.mobile-link, .mobile-sublink').forEach((link) => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // glowing custom cursor
+    const cursorGlow = document.getElementById('cursorGlow');
+    const cursorDot = document.getElementById('cursorDot');
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (cursorGlow && cursorDot && hasFinePointer) {
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let glowX = mouseX;
+      let glowY = mouseY;
+
+      const lerp = (a, b, n) => (1 - n) * a + n * b;
+
+      function renderCursor(){
+        glowX = lerp(glowX, mouseX, 0.14);
+        glowY = lerp(glowY, mouseY, 0.14);
+        cursorGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+        cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(renderCursor);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorGlow.classList.add('active');
+        cursorDot.classList.add('active');
+      });
+
+      document.addEventListener('mouseleave', () => {
+        cursorGlow.classList.remove('active');
+        cursorDot.classList.remove('active');
+      });
+
+      requestAnimationFrame(renderCursor);
+    }
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    revealEls.forEach((el) => revealObserver.observe(el));
+
+    // floating particles in the quote section
+    const particleContainer = document.getElementById('quoteParticles');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (particleContainer && !prefersReducedMotion) {
+      const particleColors = ['#D8C08B', '#E8ECE1', '#B9924A'];
+      const particleCount = 32;
+
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement('div');
+        p.className = 'quote-particle';
+
+        const size = (Math.random() * 3 + 1.5).toFixed(1);
+        const left = (Math.random() * 100).toFixed(1);
+        const duration = (Math.random() * 14 + 14).toFixed(1);
+        const delay = (Math.random() * -duration).toFixed(1);
+        const drift = (Math.random() * 100 - 50).toFixed(0);
+        const opacity = (Math.random() * 0.35 + 0.25).toFixed(2);
+        const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = left + '%';
+        p.style.background = color;
+        p.style.animationDuration = duration + 's';
+        p.style.animationDelay = delay + 's';
+        p.style.setProperty('--p-drift', drift + 'px');
+        p.style.setProperty('--p-opacity', opacity);
+
+        particleContainer.appendChild(p);
+      }
+    }
+  </script>
+
+</body>
+</html>

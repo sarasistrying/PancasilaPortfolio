@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+<title>Sila I — Ketuhanan Yang Maha Esa — Portofolio Pancasila</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #17241C;
+    --sawah: #3F6B4A;
+    --sawah-light: #6E9B78;
+    --mist: #E8ECE1;
+    --cloud: #F6F3EA;
+    --gold: #B9924A;
+    --gold-soft: #D8C08B;
+    --merah: #8C3A32;
+    --biru: #4A6B8A;
+    --biru-soft: #8FADC7;
+    --ungu: #6B5478;
+    --ungu-soft: #A98DB8;
+
+    --font-display: "Anton", sans-serif;
+    --font-body: "Plus Jakarta Sans", sans-serif;
+    --font-quote: "Playfair Display", Georgia, serif;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family: var(--font-body); background: var(--cloud); color: var(--ink); overflow-x:hidden; }
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---------- NAVBAR ---------- */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 26px clamp(24px, 5vw, 64px);
+    transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+  }
+  .navbar.scrolled{
+    background: rgba(23, 36, 28, 0.92);
+    backdrop-filter: blur(10px);
+    padding: 16px clamp(24px, 5vw, 64px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-logo{ height:60px; width:auto; display:block; }
+  .nav-links{ display:flex; align-items:center; gap: clamp(20px, 3vw, 42px); list-style:none; }
+  .nav-links > li{ position:relative; }
+  .nav-links a, .nav-trigger{
+    font-size:14.5px; font-weight:600; letter-spacing:0.02em; color: var(--cloud);
+    cursor:pointer; display:flex; align-items:center; gap:6px; padding:6px 2px;
+    position:relative; background:none; border:none; font-family: var(--font-body);
+  }
+  .nav-links a::after, .nav-trigger::after{
+    content:""; position:absolute; left:0; bottom:-2px; width:0%; height:2px;
+    background: var(--gold); transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after, .nav-item.open .nav-trigger::after{ width:100%; }
+  .chevron{
+    width:9px; height:9px; border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px); transition: transform 0.3s ease; margin-left:2px;
+  }
+  .nav-item.open .chevron{ transform: rotate(225deg) translateY(2px); }
+  .dropdown{
+    position:absolute; top: calc(100% + 18px); left:50%; transform: translateX(-50%) translateY(-8px);
+    min-width:240px; background: var(--ink); border:1px solid rgba(185,146,74,0.25); border-radius:10px;
+    padding:10px; opacity:0; visibility:hidden;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  }
+  .nav-item.open .dropdown{ opacity:1; visibility:visible; transform: translateX(-50%) translateY(0); }
+  .dropdown a{
+    display:flex; align-items:baseline; gap:10px; padding:11px 14px; border-radius:7px;
+    font-size:14px; font-weight:500; color: var(--mist);
+    transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+  }
+  .dropdown a::after{ content:none; }
+  .dropdown a:hover{ background: rgba(185,146,74,0.12); color: var(--gold-soft); padding-left:18px; }
+  .dropdown a.current{ color: var(--gold-soft); background: rgba(185,146,74,0.1); }
+  .sila-num{ font-family: var(--font-display); font-size:12px; color: var(--gold); letter-spacing:0.05em; flex-shrink:0; width:20px; }
+
+  /* ---------- MOBILE MENU ---------- */
+  .hamburger{
+    display:none; flex-direction:column; justify-content:center; gap:6px; width:34px; height:34px;
+    background:none; border:none; cursor:pointer; padding:0; z-index:210;
+  }
+  .hamburger span{ display:block; width:100%; height:2px; background: var(--cloud); border-radius:2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+  .hamburger.active span:nth-child(1){ transform: translateY(8px) rotate(45deg); }
+  .hamburger.active span:nth-child(2){ opacity:0; }
+  .hamburger.active span:nth-child(3){ transform: translateY(-8px) rotate(-45deg); }
+  .mobile-overlay{
+    position:fixed; inset:0; background: rgba(15,22,16,0.55); backdrop-filter: blur(2px);
+    opacity:0; visibility:hidden; transition: opacity 0.35s ease, visibility 0.35s; z-index:190;
+  }
+  .mobile-overlay.active{ opacity:1; visibility:visible; }
+  .mobile-drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(320px, 82vw); background: var(--ink); z-index:200;
+    transform: translateX(100%); transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.35);
+    display:flex; flex-direction:column; padding:24px 22px 32px; overflow-y:auto;
+  }
+  .mobile-drawer.active{ transform: translateX(0); }
+  .mobile-drawer-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+  .mobile-close{ background:none; border:none; color: var(--cloud); font-size:30px; line-height:1; cursor:pointer; padding:2px 6px; }
+  .mobile-links{ display:flex; flex-direction:column; }
+  .mobile-link{ color: var(--cloud); font-family: var(--font-body); font-weight:600; font-size:16px; padding:15px 4px; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .mobile-accordion-trigger{
+    display:flex; align-items:center; justify-content:space-between; width:100%; background:none; border:none;
+    text-align:left; color: var(--cloud); font-family: var(--font-body); font-weight:600; font-size:16px;
+    padding:15px 4px; border-bottom:1px solid rgba(255,255,255,0.08); cursor:pointer;
+  }
+  .mobile-accordion-trigger .chevron{ transition: transform 0.3s ease; }
+  .mobile-accordion-trigger.open .chevron{ transform: rotate(225deg); }
+  .mobile-accordion{ max-height:0; overflow:hidden; transition: max-height 0.4s ease; display:flex; flex-direction:column; }
+  .mobile-accordion.open{ max-height:420px; }
+  .mobile-sublink{ color: var(--mist); font-size:14px; padding:11px 4px 11px 16px; display:flex; gap:10px; align-items:baseline; }
+  .mobile-sublink:hover{ color: var(--gold-soft); }
+  .mobile-sublink.current{ color: var(--gold-soft); }
+  @media (max-width: 860px){ .hamburger{ display:flex; } .navbar .nav-links{ display:none; } }
+
+  /* ---------- GLOWING CURSOR ---------- */
+  .cursor-glow{
+    display:none; position:fixed; top:0; left:0; width:280px; height:280px; border-radius:50%;
+    background: radial-gradient(circle, rgba(216,192,139,0.55) 0%, rgba(216,192,139,0.18) 42%, transparent 72%);
+    filter: blur(4px); mix-blend-mode: screen; pointer-events:none; z-index:9999;
+    transform: translate(-50%, -50%); will-change: transform; opacity:0; transition: opacity 0.35s ease;
+  }
+  .cursor-glow.active{ opacity:1; }
+  .cursor-dot{
+    display:none; position:fixed; top:0; left:0; width:8px; height:8px; border-radius:50%;
+    background: var(--gold-soft); pointer-events:none; z-index:10000;
+    transform: translate(-50%, -50%); will-change: transform; opacity:0; transition: opacity 0.35s ease;
+  }
+  .cursor-dot.active{ opacity:1; }
+  @media (hover: hover) and (pointer: fine){
+    body{ cursor:none; } a, button{ cursor:none; }
+    .cursor-glow, .cursor-dot{ display:block; }
+  }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{ opacity:0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.is-visible{ opacity:1; transform: translateY(0); }
+  .reveal-delay-1{ transition-delay:0.05s; }
+  .reveal-delay-2{ transition-delay:0.25s; }
+  .reveal-delay-3{ transition-delay:0.45s; }
+  .reveal-delay-4{ transition-delay:0.65s; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  .eyebrow-line{ width:36px; height:1px; background: var(--gold); }
+
+  /* ---------- SILA HERO ---------- */
+  .sila-hero{
+    position:relative;
+    min-height: 78vh;
+    width:100%;
+    overflow:hidden;
+    background: linear-gradient(160deg, var(--sawah) 0%, #223626 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding: 160px clamp(24px, 6vw, 100px) 90px;
+  }
+
+  .sila-mesh{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; mix-blend-mode:overlay; opacity:0.8; }
+  .sila-mesh-blob{ position:absolute; border-radius:50%; filter: blur(85px); will-change: transform; }
+  .sila-mesh-1{
+    width:48vw; height:48vw; top:-16%; left:-10%;
+    background: radial-gradient(circle, rgba(216,192,139,0.35), transparent 68%);
+    animation: silaMeshDrift1 30s ease-in-out infinite alternate;
+  }
+  .sila-mesh-2{
+    width:42vw; height:42vw; bottom:-18%; right:-8%;
+    background: radial-gradient(circle, rgba(232,236,225,0.25), transparent 68%);
+    animation: silaMeshDrift2 34s ease-in-out infinite alternate;
+  }
+  @keyframes silaMeshDrift1{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(5vw,4vh) scale(1.12); } }
+  @keyframes silaMeshDrift2{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(-4vw,-4vh) scale(1.1); } }
+  @media (prefers-reduced-motion: reduce){ .sila-mesh-blob{ animation:none; } }
+
+  .sila-eyebrow{
+    position:relative; z-index:2; display:flex; align-items:center; gap:12px;
+    color: var(--gold-soft); font-size: clamp(12px, 1.4vw, 16px); letter-spacing:0.3em;
+    font-weight:700; text-transform:uppercase; margin-bottom:22px;
+  }
+
+  .sila-title{
+    position:relative; z-index:2;
+    font-family: var(--font-display);
+    color: var(--cloud);
+    line-height: 0.98;
+    font-size: clamp(34px, 6.2vw, 84px);
+    max-width: 1100px;
+    letter-spacing: 0.01em;
+    text-shadow:
+      0 0 26px rgba(246,243,234,0.4),
+      0 0 70px rgba(246,243,234,0.22),
+      0 8px 40px rgba(0,0,0,0.4);
+    opacity:0;
+    animation: silaTitleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards, silaTitleFloat 6s ease-in-out 1.4s infinite;
+  }
+
+  @keyframes silaTitleIn{ from{ opacity:0; transform: translateY(40px); } to{ opacity:1; transform: translateY(0); } }
+  @keyframes silaTitleFloat{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-14px); } }
+  @media (prefers-reduced-motion: reduce){ .sila-title{ animation:none; opacity:1; } }
+
+  .sila-roman-badge{
+    position:relative; z-index:2; margin-top:28px;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:56px; height:56px; border-radius:50%;
+    border:1.5px solid rgba(216,192,139,0.5);
+    background: rgba(216,192,139,0.08);
+    font-family: var(--font-display);
+    color: var(--gold-soft);
+    font-size:20px;
+  }
+
+  /* ---------- ACTIVITIES SECTION ---------- */
+  .activities-section{ background: var(--cloud); padding: 100px clamp(24px, 6vw, 100px) 120px; }
+
+  .activities-intro{ max-width: 780px; margin: 0 auto 60px; text-align:center; }
+  .activities-intro .intro-label{
+    font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color: var(--sawah); font-weight:700;
+    display:flex; justify-content:center; align-items:center; gap:12px;
+  }
+  .activities-intro .intro-label .eyebrow-line{ background: var(--sawah); }
+  .activities-intro h2{
+    font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 40px); color: var(--ink);
+    line-height:1.15; margin-top:16px; letter-spacing:0.01em;
+  }
+  .activities-intro p{
+    font-size:15.5px; line-height:1.75; color:#465046; margin-top:16px;
+  }
+
+  .activities-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 26px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .activity-card{
+    position:relative;
+    padding: 30px 28px 28px;
+    border-radius: 20px;
+    background: var(--card-tint);
+    border: 1px solid var(--card-line);
+    overflow:hidden;
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+  }
+  .activity-card:hover{ transform: translateY(-6px); box-shadow: 0 30px 50px -20px rgba(23,36,28,0.25); }
+  .activity-card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:6px; background: var(--card-accent);
+  }
+
+  .cat-rumah{    --card-tint: rgba(185,146,74,0.12); --card-line: rgba(185,146,74,0.28); --card-accent: var(--gold); }
+  .cat-sekolah{  --card-tint: rgba(63,107,74,0.12);  --card-line: rgba(63,107,74,0.28);  --card-accent: var(--sawah); }
+  .cat-masyarakat{ --card-tint: rgba(140,58,50,0.11); --card-line: rgba(140,58,50,0.26); --card-accent: var(--merah); }
+  .cat-bangsa{   --card-tint: rgba(74,107,138,0.12); --card-line: rgba(74,107,138,0.28); --card-accent: var(--biru); }
+
+  .activity-cat-label{
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--card-accent);
+    margin-bottom: 18px;
+  }
+
+  .activity-field{ margin-bottom:16px; }
+  .activity-field .af-label{
+    display:block; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    font-weight:700; color: var(--card-accent); opacity:0.9; margin-bottom:4px;
+  }
+  .activity-field .af-value{
+    display:block; font-size:14px; font-weight:600; color: var(--ink); line-height:1.45;
+  }
+
+  .activity-levels{ margin-bottom:18px; }
+  .activity-levels .af-label{
+    display:block; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    font-weight:700; color: var(--card-accent); opacity:0.9; margin-bottom:12px;
+  }
+  .level-row{ margin-bottom:10px; }
+  .level-row:last-child{ margin-bottom:0; }
+  .level-top{ display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#3A423B; margin-bottom:5px; }
+  .level-bar{ height:7px; border-radius:4px; background: rgba(23,36,28,0.08); overflow:hidden; }
+  .level-fill{ height:100%; border-radius:4px; background: var(--card-accent); }
+
+  /* ---------- FOOTER ---------- */
+  .site-footer{ background: var(--ink); color: var(--mist); padding: 74px clamp(24px, 6vw, 100px) 30px; }
+  .footer-top{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:48px; padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .footer-brand{ display:flex; flex-direction:column; gap:16px; max-width:320px; }
+  .footer-brand-logo{ display:flex; align-items:center; gap:10px; }
+  .footer-brand-logo img{ height:46px; width:auto; }
+  .footer-brand p{ font-size:13.5px; line-height:1.7; color: var(--mist); opacity:0.75; }
+  .footer-cols{ display:flex; gap: clamp(32px, 6vw, 80px); flex-wrap:wrap; }
+  .footer-col h4{ font-family: var(--font-body); font-size:12px; letter-spacing:0.22em; text-transform:uppercase; color: var(--gold-soft); margin-bottom:16px; font-weight:700; }
+  .footer-col a{ display:block; font-size:14px; color: var(--mist); padding:6px 0; opacity:0.85; transition: color 0.2s ease, opacity 0.2s ease, padding-left 0.2s ease; }
+  .footer-col a:hover{ color: var(--gold-soft); opacity:1; padding-left:4px; }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding-top:26px; font-size:12.5px; opacity:0.6; }
+  @media (max-width: 640px){ .footer-top{ flex-direction:column; } .footer-bottom{ flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="brand"><img class="brand-logo" src="img/logo.png" alt="Portofolio Pancasila"></div>
+    <ul class="nav-links">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li class="nav-item" id="kegiatanItem">
+        <button class="nav-trigger" id="kegiatanTrigger">
+          Kegiatan Pancasila <span class="chevron"></span>
+        </button>
+        <div class="dropdown">
+          <a href="sila-1.html" class="current"><span class="sila-num">I</span> Ketuhanan Yang Maha Esa</a>
+          <a href="sila-2.html" class=""><span class="sila-num">II</span> Kemanusiaan yang Adil dan Beradab</a>
+          <a href="sila-3.html" class=""><span class="sila-num">III</span> Persatuan Indonesia</a>
+          <a href="sila-4.html" class=""><span class="sila-num">IV</span> Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan</a>
+          <a href="sila-5.html" class=""><span class="sila-num">V</span> Keadilan Sosial bagi Seluruh Rakyat Indonesia</a>
+        </div>
+      </li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <img class="brand-logo" src="img/logo.png" alt="Portofolio Pancasila" style="height:38px;">
+      <button class="mobile-close" id="mobileCloseBtn" aria-label="Tutup menu">&times;</button>
+    </div>
+    <nav class="mobile-links">
+      <a href="index.html#home" class="mobile-link">Home</a>
+      <a href="profile.html" class="mobile-link">Profile</a>
+      <button class="mobile-accordion-trigger" id="mobileKegiatanTrigger">
+        Kegiatan Pancasila <span class="chevron"></span>
+      </button>
+      <div class="mobile-accordion" id="mobileKegiatanPanel">
+        <a href="sila-1.html" class="mobile-sublink current"><span class="sila-num">I</span> Ketuhanan Yang Maha Esa</a>
+          <a href="sila-2.html" class="mobile-sublink"><span class="sila-num">II</span> Kemanusiaan yang Adil dan Beradab</a>
+          <a href="sila-3.html" class="mobile-sublink"><span class="sila-num">III</span> Persatuan Indonesia</a>
+          <a href="sila-4.html" class="mobile-sublink"><span class="sila-num">IV</span> Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan</a>
+          <a href="sila-5.html" class="mobile-sublink"><span class="sila-num">V</span> Keadilan Sosial bagi Seluruh Rakyat Indonesia</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ================= 1. SILA HERO ================= -->
+  <section class="sila-hero">
+    <div class="sila-mesh">
+      <div class="sila-mesh-blob sila-mesh-1"></div>
+      <div class="sila-mesh-blob sila-mesh-2"></div>
+    </div>
+
+    <div class="sila-eyebrow reveal reveal-delay-1">
+      <span class="eyebrow-line"></span>
+      Sila Ke-I
+      <span class="eyebrow-line"></span>
+    </div>
+
+    <h1 class="sila-title">KETUHANAN YANG MAHA ESA</h1>
+
+    <div class="sila-roman-badge reveal reveal-delay-2">I</div>
+  </section>
+
+  <!-- ================= 2. ACTIVITIES SECTION ================= -->
+  <section class="activities-section">
+    <div class="activities-intro">
+      <div class="intro-label reveal reveal-delay-1"><span class="eyebrow-line"></span> Kegiatan</div>
+      <h2 class="reveal reveal-delay-2">Penerapan Sila I</h2>
+      <p class="reveal reveal-delay-3">Sila pertama mengajarkan kita untuk percaya dan bertakwa kepada Tuhan Yang Maha Esa, serta hidup rukun dan saling menghormati di tengah keberagaman agama dan kepercayaan yang ada di Indonesia.</p>
+    </div>
+
+    <div class="activities-grid">
+      <div class="activity-card cat-rumah reveal reveal-delay-1">
+        <div class="activity-cat-label">RUMAH</div>
+        <div class="activity-field">
+          <span class="af-label">Nama Kegiatan</span>
+          <span class="af-value">Berdoa dan Beribadah Bersama Keluarga</span>
+        </div>
+        <div class="activity-levels">
+          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
+          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>9/10</span></div><div class="level-bar"><div class="level-fill" style="width:90%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Nilai Pancasila</span>
+          <span class="af-value">Ketuhanan Yang Maha Esa — kepatuhan beribadah</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Diri Sendiri</span>
+          <span class="af-value">Menumbuhkan ketenangan batin dan kedekatan dengan Tuhan.</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Orang Lain</span>
+          <span class="af-value">Mempererat hubungan dan keharmonisan dalam keluarga.</span>
+        </div>
+      </div>
+      <div class="activity-card cat-sekolah reveal reveal-delay-1">
+        <div class="activity-cat-label">SEKOLAH</div>
+        <div class="activity-field">
+          <span class="af-label">Nama Kegiatan</span>
+          <span class="af-value">Mengikuti Ibadah dan Kegiatan Rohani di Sekolah</span>
+        </div>
+        <div class="activity-levels">
+          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
+          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Nilai Pancasila</span>
+          <span class="af-value">Ketuhanan Yang Maha Esa — disiplin spiritual</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Diri Sendiri</span>
+          <span class="af-value">Memperkuat nilai spiritual dan kedisiplinan diri.</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Orang Lain</span>
+          <span class="af-value">Menciptakan lingkungan sekolah yang religius dan tenang.</span>
+        </div>
+      </div>
+      <div class="activity-card cat-masyarakat reveal reveal-delay-1">
+        <div class="activity-cat-label">MASYARAKAT</div>
+        <div class="activity-field">
+          <span class="af-label">Nama Kegiatan</span>
+          <span class="af-value">Menghadiri Perayaan Keagamaan di Lingkungan Sekitar</span>
+        </div>
+        <div class="activity-levels">
+          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
+          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>9/10</span></div><div class="level-bar"><div class="level-fill" style="width:90%"></div></div></div>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Nilai Pancasila</span>
+          <span class="af-value">Ketuhanan Yang Maha Esa — toleransi antarumat beragama</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Diri Sendiri</span>
+          <span class="af-value">Memperluas wawasan tentang keberagaman kepercayaan.</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Orang Lain</span>
+          <span class="af-value">Mempererat kerukunan antarwarga berbeda agama.</span>
+        </div>
+      </div>
+      <div class="activity-card cat-bangsa reveal reveal-delay-1">
+        <div class="activity-cat-label">BANGSA & BERNEGARA</div>
+        <div class="activity-field">
+          <span class="af-label">Nama Kegiatan</span>
+          <span class="af-value">Menjaga Kerukunan Antarumat Beragama di Indonesia</span>
+        </div>
+        <div class="activity-levels">
+          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
+          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
+            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>9/10</span></div><div class="level-bar"><div class="level-fill" style="width:90%"></div></div></div>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Nilai Pancasila</span>
+          <span class="af-value">Ketuhanan Yang Maha Esa — persatuan dalam keberagaman</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Diri Sendiri</span>
+          <span class="af-value">Menumbuhkan sikap toleran sebagai warga negara.</span>
+        </div>
+        <div class="activity-field">
+          <span class="af-label">Manfaat bagi Orang Lain</span>
+          <span class="af-value">Menjaga stabilitas dan kedamaian bangsa.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <img src="img/logo.png" alt="Portofolio Pancasila">
+        </div>
+        <p>
+          Portofolio Pancasila — menghimpun kegiatan dan refleksi penerapan
+          lima sila Pancasila dalam kehidupan sehari-hari.
+        </p>
+      </div>
+
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Navigasi</h4>
+          <a href="index.html#home">Home</a>
+          <a href="profile.html">Profile</a>
+          <a href="sila-1.html">Kegiatan Pancasila</a>
+        </div>
+        <div class="footer-col">
+          <h4>Sila Pancasila</h4>
+          <a href="sila-1.html">Sila I</a>
+          <a href="sila-2.html">Sila II</a>
+          <a href="sila-3.html">Sila III</a>
+          <a href="sila-4.html">Sila IV</a>
+          <a href="sila-5.html">Sila V</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Portofolio Pancasila — Kelompok Satu</span>
+      <span>Dibuat dengan semangat gotong royong</span>
+    </div>
+  </footer>
+
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    const kegiatanItem = document.getElementById('kegiatanItem');
+    const kegiatanTrigger = document.getElementById('kegiatanTrigger');
+
+    kegiatanTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      kegiatanItem.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if(!kegiatanItem.contains(e.target)){
+        kegiatanItem.classList.remove('open');
+      }
+    });
+
+    // mobile hamburger drawer
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+    const mobileKegiatanTrigger = document.getElementById('mobileKegiatanTrigger');
+    const mobileKegiatanPanel = document.getElementById('mobileKegiatanPanel');
+
+    function openMobileMenu(){
+      mobileDrawer.classList.add('active');
+      mobileOverlay.classList.add('active');
+      hamburgerBtn.classList.add('active');
+      hamburgerBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu(){
+      mobileDrawer.classList.remove('active');
+      mobileOverlay.classList.remove('active');
+      hamburgerBtn.classList.remove('active');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    hamburgerBtn.addEventListener('click', () => {
+      if (mobileDrawer.classList.contains('active')) { closeMobileMenu(); } else { openMobileMenu(); }
+    });
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+    mobileCloseBtn.addEventListener('click', closeMobileMenu);
+    mobileKegiatanTrigger.addEventListener('click', () => {
+      mobileKegiatanTrigger.classList.toggle('open');
+      mobileKegiatanPanel.classList.toggle('open');
+    });
+    document.querySelectorAll('.mobile-link, .mobile-sublink').forEach((link) => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // glowing custom cursor
+    const cursorGlow = document.getElementById('cursorGlow');
+    const cursorDot = document.getElementById('cursorDot');
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (cursorGlow && cursorDot && hasFinePointer) {
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let glowX = mouseX;
+      let glowY = mouseY;
+      const lerp = (a, b, n) => (1 - n) * a + n * b;
+      function renderCursor(){
+        glowX = lerp(glowX, mouseX, 0.14);
+        glowY = lerp(glowY, mouseY, 0.14);
+        cursorGlow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+        cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(renderCursor);
+      }
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        cursorGlow.classList.add('active'); cursorDot.classList.add('active');
+      });
+      document.addEventListener('mouseleave', () => {
+        cursorGlow.classList.remove('active'); cursorDot.classList.remove('active');
+      });
+      requestAnimationFrame(renderCursor);
+    }
+
+    // scroll-triggered reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach((el) => revealObserver.observe(el));
+  </script>
+
+</body>
+</html>
