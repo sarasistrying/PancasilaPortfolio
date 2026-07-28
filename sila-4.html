@@ -359,6 +359,33 @@
     transition: opacity 0.22s ease;
   }
 
+  .detail-content{
+    display:flex; flex-direction:column; gap:22px;
+  }
+
+  .detail-panel.layout-split{
+    flex-direction: row;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .detail-panel.layout-split .detail-photo{
+    flex: 0 0 min(560px, 48vw);
+    width: min(560px, 48vw);
+    aspect-ratio: 3 / 4;
+    min-height: 0;
+  }
+  .detail-panel.layout-split .detail-content{
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  @media (max-width: 860px){
+    .detail-panel.layout-split{ flex-direction: column; }
+    .detail-panel.layout-split .detail-photo{ width:100%; flex-basis:auto; aspect-ratio: 3 / 4; }
+  }
+
   .detail-photo{
     position:relative;
     border-radius: 22px;
@@ -709,31 +736,33 @@
         </div>
       </div>
 
-      <div class="detail-boxes">
-        <div class="box-pancasila">
-          <h3>Penerapan Pancasila</h3>
-          <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
-        </div>
-        <div class="box-chart">
-          <h3>Kekuatan Sikap &amp; Perilaku</h3>
-          <div class="chart-row">
-            <div class="pie-wrap">
-              <div class="pie-ring"></div>
-              <div class="pie-chart" id="pieChart"></div>
-              <div class="pie-labels" id="pieLabels"></div>
+      <div class="detail-content" id="detailContent">
+        <div class="detail-boxes">
+          <div class="box-pancasila">
+            <h3>Penerapan Pancasila</h3>
+            <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
+          </div>
+          <div class="box-chart">
+            <h3>Kekuatan Sikap &amp; Perilaku</h3>
+            <div class="chart-row">
+              <div class="pie-wrap">
+                <div class="pie-ring"></div>
+                <div class="pie-chart" id="pieChart"></div>
+                <div class="pie-labels" id="pieLabels"></div>
+              </div>
+              <ul class="chart-legend" id="chartLegend"></ul>
             </div>
-            <ul class="chart-legend" id="chartLegend"></ul>
           </div>
         </div>
-      </div>
 
-      <div class="detail-strip" id="stripDiri">
-        <span class="ds-label">Dampak bagi Diri Sendiri</span>
-        <p id="dampakDiri"></p>
-      </div>
-      <div class="detail-strip" id="stripOrang">
-        <span class="ds-label">Dampak bagi Orang Sekitar</span>
-        <p id="dampakOrang"></p>
+        <div class="detail-strip" id="stripDiri">
+          <span class="ds-label">Dampak bagi Diri Sendiri</span>
+          <p id="dampakDiri"></p>
+        </div>
+        <div class="detail-strip" id="stripOrang">
+          <span class="ds-label">Dampak bagi Orang Sekitar</span>
+          <p id="dampakOrang"></p>
+        </div>
       </div>
     </div>
   </section>
@@ -864,39 +893,39 @@
     // hero category switcher (rumah / sekolah / masyarakat / bangsa)
     const catData = {
       rumah: {
-        label: 'Rumah', img: 'img/rumah_s1.jpg',
+        label: 'Rumah', img: 'img/dokumrumah_s4.jpg',
         title: 'Musyawarah Keluarga dalam Mengambil Keputusan',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.',
+        pancasila: 'Berbagi informasi tentang keseharian anggota keluarga seperti menceritakan masalah dan kesusahan agar bisa nasehati dan diberi pendapat yang bijak. Mengambil keputusan bersama untuk kepentingan seluruh anggota keluarga.',
         levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Melatih kemampuan menyampaikan pendapat dengan baik.',
-        orang: 'Menghasilkan keputusan yang adil bagi seluruh keluarga.',
+        diri: 'Merasa lebih dekat dengan keluarga dan lebih mengerti tentang kesenangan dan kesusahan mereka.',
+        orang: 'Merasa terlihat dan termengerti oleh orang terdekat mereka.',
         accent: 'var(--gold)'
       },
       sekolah: {
-        label: 'Sekolah', img: 'img/sekolah_s1.jpg',
-        title: 'Aktif dalam Musyawarah OSIS/Kelas',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante dapibus diam facilisis, at fringilla nunc facilisis.',
+        label: 'Sekolah', img: 'img/dokumsekolah_s4.jpg',
+        title: 'Kerja Kelompok dengan Teman Sekelas',
+        pancasila: 'Membagi-bagi ide/pendapat tentang tugas serta meringankan perkerjaan sesama teman.',
         levels: [ ['Kejujuran',7], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',8], ['Toleransi',7] ],
-        diri: 'Mengasah kemampuan berpikir kritis dan berbicara di depan umum.',
-        orang: 'Mewakili aspirasi teman-teman sekelas.',
+        diri: 'Merasa terbantu dalam tugas serta dihargai atas pendapat-pendapat yang dikeluarkan.',
+        orang: 'Merasa tugas dapat dengan lebih mudah dan cepat terselesaikan.',
         accent: 'var(--sawah)'
       },
       masyarakat: {
-        label: 'Masyarakat', img: 'img/masyarakat_s1.jpg',
-        title: 'Mengikuti Rapat Warga/RT',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent libero sed cursus ante dapibus diam nec odio.',
+        label: 'Masyarakat', img: 'img/dokummasyarakat_s4.jpg',
+        title: 'Diskusi tentang Kegiatan Les dengan Teman Lewat Chat Online',
+        pancasila: 'Berbagi informasi tentang waktu les sesama teman.',
         levels: [ ['Kejujuran',7], ['Komitmen',7], ['Kreativitas',6], ['Tanggung Jawab',7], ['Toleransi',8] ],
-        diri: 'Melatih partisipasi aktif dalam kehidupan bermasyarakat.',
-        orang: 'Membantu tercapainya keputusan yang disepakati bersama.',
+        diri: 'Membantu memilih keputusan dalam waktu les.',
+        orang: 'Merasa terhargai tentang keputusan mereka.',
         accent: 'var(--merah)'
       },
       bangsa: {
-        label: 'Bangsa & Negara', img: 'img/bangsa_s1.jpg',
-        title: 'Menggunakan Hak Pilih dalam Pemilu',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nec odio praesent libero sed cursus ante dapibus diam.',
+        label: 'Bangsa & Negara', img: 'img/dokumnegara_s4.jpg',
+        title: 'Membagi Informasi tentang Pemilu',
+        pancasila: 'Menyebar informasi tentang pemilu sehingga mengerti pentingnya mengambil keputusan dalam kehidupan demokratis.',
         levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',7] ],
-        diri: 'Menumbuhkan kesadaran berdemokrasi sebagai warga negara.',
-        orang: 'Menentukan arah kepemimpinan bangsa ke depan.',
+        diri: 'Meningkatnya pemahaman tentang pentingnya demokrasi dan pemilihan bersama.',
+        orang: 'Membantu memberimemperoleh informasi yang benar tentang pemilu sehingga dapat menggunakan hak pilihnya dengan bijaksana.',
         accent: 'var(--biru)'
       }
     };
@@ -940,6 +969,8 @@
 
     function renderCategory(key){
       const d = catData[key];
+
+      detailPanel.classList.toggle('layout-split', key === 'masyarakat' || key === 'bangsa');
 
       detailPhotoImg.src = d.img;
       detailPhoto.style.setProperty('--accent', d.accent);
