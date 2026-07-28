@@ -502,7 +502,7 @@
   .hero-text{
     position:absolute;
     left: 50%;
-    top: 52%;
+    top: 42%;
     transform: translate(-50%, -50%);
     z-index:2;
     max-width: 90%;
@@ -576,8 +576,8 @@
 
   .hero-text .line{
     display:block;
-    font-size: clamp(44px, min(12.5vw, 15vh), 160px);
-    letter-spacing: 0.01em;
+    font-size: clamp(56px, min(16vw, 19vh), 210px);
+    letter-spacing: 0.005em;
     opacity: 0;
     transform: translateY(70px);
     animation: heroLineUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -626,20 +626,24 @@
 
   .hero-eyebrow{
     position:absolute;
-    top: 20%;
+    top: 13%;
     left: 50%;
     transform: translateX(-50%);
     z-index:2;
     display:flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items:center;
     gap:12px;
+    row-gap: 8px;
+    max-width: 92vw;
     color: var(--mist);
     font-size: clamp(11px, 1.3vw, 15px);
     letter-spacing:0.28em;
     font-weight:600;
     text-transform:uppercase;
     opacity:0.85;
+    text-align:center;
   }
 
   .eyebrow-line{
@@ -873,10 +877,10 @@
     .carousel-track{ animation: none; }
   }
 
-  .cs-1{ width:440px; height:290px; }
-  .cs-2{ width:500px; height:330px; }
-  .cs-3{ width:470px; height:310px; }
-  .cs-4{ width:520px; height:350px; }
+  .cs-1{ width: clamp(220px, 52vw, 440px); height: clamp(146px, 34vw, 290px); }
+  .cs-2{ width: clamp(240px, 58vw, 500px); height: clamp(158px, 38vw, 330px); }
+  .cs-3{ width: clamp(230px, 55vw, 470px); height: clamp(150px, 36vw, 310px); }
+  .cs-4{ width: clamp(250px, 60vw, 520px); height: clamp(166px, 40vw, 350px); }
 
   .lift-up{
     animation: imgBobUp 5.5s ease-in-out infinite;
@@ -952,7 +956,14 @@
   @media (max-width: 860px){
     .navbar .nav-links{ display:none; }
     .hero-text{ top:32%; }
-    .hero-eyebrow{ font-size:11px; letter-spacing:0.2em; }
+    .hero-eyebrow{ font-size:11px; letter-spacing:0.2em; gap:8px; row-gap:6px; }
+    .carousel-track{ gap:20px; }
+    .carousel-outer{ padding: 24px clamp(20px, 6vw, 60px) 50px; }
+  }
+
+  @media (max-width: 560px){
+    .intro-content p{ text-align:left; text-align-last:left; }
+    .eyebrow-line{ width:20px; }
   }
 
   /* --- scroll-triggered reveal, same push-up-and-fade language as the hero --- */
@@ -1230,7 +1241,7 @@
     <div class="brand"><img class="brand-logo" src="img/logo.png" alt="Portofolio Pancasila"></div>
     <ul class="nav-links">
       <li><a href="#home">Home</a></li>
-      <li><a href="#profile">Profile</a></li>
+      <li><a href="profile.html">Profile</a></li>
       <li class="nav-item" id="kegiatanItem">
         <button class="nav-trigger" id="kegiatanTrigger">
           Kegiatan Pancasila <span class="chevron"></span>
@@ -1257,7 +1268,7 @@
     </div>
     <nav class="mobile-links">
       <a href="#home" class="mobile-link">Home</a>
-      <a href="#profile" class="mobile-link">Profile</a>
+      <a href="profile.html" class="mobile-link">Profile</a>
       <button class="mobile-accordion-trigger" id="mobileKegiatanTrigger">
         Kegiatan Pancasila <span class="chevron"></span>
       </button>

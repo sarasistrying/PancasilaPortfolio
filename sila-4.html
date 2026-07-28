@@ -153,32 +153,41 @@
   .eyebrow-line{ width:36px; height:1px; background: var(--gold); }
 
   /* ---------- SILA HERO ---------- */
-  .sila-hero{
-    position:relative;
-    min-height: 78vh;
-    width:100%;
-    overflow:hidden;
-    background: linear-gradient(160deg, var(--sawah) 0%, #223626 100%);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-    padding: 160px clamp(24px, 6vw, 100px) 90px;
+  .hero-frame{
+    background: var(--cloud);
+    padding: 0;
   }
 
-  .sila-mesh{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; mix-blend-mode:overlay; opacity:0.8; }
-  .sila-mesh-blob{ position:absolute; border-radius:50%; filter: blur(85px); will-change: transform; }
-  .sila-mesh-1{
-    width:48vw; height:48vw; top:-16%; left:-10%;
-    background: radial-gradient(circle, rgba(216,192,139,0.35), transparent 68%);
-    animation: silaMeshDrift1 30s ease-in-out infinite alternate;
+  .sila-hero{
+    position:relative;
+    min-height: 94vh;
+    width:100%;
+    overflow:hidden;
+    background: var(--ink);
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+    padding: 148px clamp(24px, 6vw, 100px) 46px;
   }
-  .sila-mesh-2{
-    width:42vw; height:42vw; bottom:-18%; right:-8%;
-    background: radial-gradient(circle, rgba(232,236,225,0.25), transparent 68%);
-    animation: silaMeshDrift2 34s ease-in-out infinite alternate;
+
+  .hero-media{ position:absolute; inset:0; z-index:0; }
+  .hero-media-img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position: center 32%;
+    opacity:0;
+    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  @keyframes silaMeshDrift1{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(5vw,4vh) scale(1.12); } }
-  @keyframes silaMeshDrift2{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(-4vw,-4vh) scale(1.1); } }
-  @media (prefers-reduced-motion: reduce){ .sila-mesh-blob{ animation:none; } }
+  .hero-media-img.is-active{ opacity:1; }
+  .hero-media-tint{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg,
+      rgba(23,36,28,0.82) 0%,
+      rgba(23,36,28,0.32) 26%,
+      rgba(23,36,28,0.46) 62%,
+      rgba(23,36,28,0.94) 100%);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-media-img{ transition:none; }
+  }
 
   .sila-eyebrow{
     position:relative; z-index:2; display:flex; align-items:center; gap:12px;
@@ -188,18 +197,34 @@
 
   .sila-title{
     position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center;
+    max-width: min(94%, 1000px);
+    margin: 0 auto;
+    opacity:0;
+    animation: silaTitleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards, silaTitleFloat 6s ease-in-out 1.4s infinite;
+  }
+
+  .st-line{
     font-family: var(--font-display);
-    color: var(--cloud);
-    line-height: 0.98;
-    font-size: clamp(34px, 6.2vw, 84px);
-    max-width: 1100px;
+    line-height: 0.96;
     letter-spacing: 0.01em;
+    text-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+
+  .st-big{
+    font-size: clamp(32px, 6.8vw, 92px);
+    color: var(--cloud);
     text-shadow:
       0 0 26px rgba(246,243,234,0.4),
       0 0 70px rgba(246,243,234,0.22),
       0 8px 40px rgba(0,0,0,0.4);
-    opacity:0;
-    animation: silaTitleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards, silaTitleFloat 6s ease-in-out 1.4s infinite;
+  }
+
+  .st-accent{
+    margin-top: 2px;
+    font-size: clamp(17px, 2.8vw, 38px);
+    color: var(--gold-soft);
   }
 
   @keyframes silaTitleIn{ from{ opacity:0; transform: translateY(40px); } to{ opacity:1; transform: translateY(0); } }
@@ -217,8 +242,101 @@
     font-size:20px;
   }
 
+  /* ---------- HERO CATEGORY SWITCHER ---------- */
+  .hero-cat-panel{
+    position:relative; z-index:2;
+    margin-top:auto;
+    padding-top:54px;
+    display:flex; flex-direction:column; align-items:center; gap:24px;
+    width:100%;
+  }
+
+  .hero-cat-text{ min-height:56px; }
+  .hero-cat-label{
+    display:block; font-family: var(--font-display); font-weight:400;
+    font-size: clamp(19px, 2.4vw, 28px); color: var(--gold-soft); letter-spacing:0.03em;
+    transition: opacity 0.3s ease;
+  }
+  .hero-cat-desc{
+    display:block; margin: 6px auto 0; max-width:520px;
+    font-size:14px; line-height:1.55; color: var(--mist); opacity:0.82;
+    transition: opacity 0.3s ease;
+  }
+
+  .hero-cat-switch{ display:flex; align-items:flex-start; gap: clamp(14px, 3vw, 30px); }
+
+  .cat-icon-item{ display:flex; flex-direction:column; align-items:center; gap:9px; width:78px; flex-shrink:0; }
+
+  .cat-icon-btn{
+    width:56px; height:56px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(246,243,234,0.08);
+    border:1.5px solid rgba(246,243,234,0.28);
+    color: var(--mist);
+    cursor:pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .cat-icon-btn svg{ width:23px; height:23px; display:block; }
+  .cat-icon-btn:hover{ transform: translateY(-3px); border-color: rgba(216,192,139,0.65); }
+  .cat-icon-item.is-active .cat-icon-btn{
+    background: var(--gold); border-color: var(--gold); color: var(--ink);
+    box-shadow: 0 12px 26px -8px rgba(185,146,74,0.65);
+    transform: translateY(-3px);
+  }
+
+  .cat-icon-caption{
+    font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+    color: var(--mist); opacity:0.65; transition: color 0.3s ease, opacity 0.3s ease;
+    text-align:center;
+  }
+  .cat-icon-item.is-active .cat-icon-caption{ color: var(--gold-soft); opacity:1; }
+
+  @media (max-width: 560px){
+    .hero-cat-switch{ gap:10px; }
+    .cat-icon-item{ width:64px; }
+    .cat-icon-btn{ width:48px; height:48px; }
+    .cat-icon-btn svg{ width:20px; height:20px; }
+  }
+
   /* ---------- ACTIVITIES SECTION ---------- */
-  .activities-section{ background: var(--cloud); padding: 100px clamp(24px, 6vw, 100px) 120px; }
+  .activities-section{ position:relative; overflow:hidden; background: var(--cloud); padding: 100px clamp(24px, 6vw, 100px) 120px; }
+
+  .activities-glow{ position:absolute; border-radius:50%; filter: blur(60px); pointer-events:none; z-index:0; opacity:0.85; }
+  .ag-1{
+    width:680px; height:680px; top:-18%; left:-14%;
+    background: radial-gradient(circle, rgba(185,146,74,0.75), transparent 68%);
+    animation: agDrift1 26s ease-in-out infinite alternate;
+  }
+  .ag-2{
+    width:760px; height:760px; bottom:-20%; right:-16%;
+    background: radial-gradient(circle, rgba(74,107,138,0.65), transparent 68%);
+    animation: agDrift2 30s ease-in-out infinite alternate;
+  }
+  .ag-3{
+    width:560px; height:560px; top:28%; left:56%;
+    background: radial-gradient(circle, rgba(140,58,50,0.55), transparent 68%);
+    animation: agDrift3 24s ease-in-out infinite alternate;
+  }
+  @keyframes agDrift1{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(5vw,4vh) scale(1.15); } }
+  @keyframes agDrift2{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(-5vw,-4vh) scale(1.1); } }
+  @keyframes agDrift3{ from{ transform: translate(0,0) scale(1); } to{ transform: translate(-4vw,5vh) scale(1.12); } }
+  @media (prefers-reduced-motion: reduce){ .activities-glow{ animation:none; } }
+
+  .activities-particles{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+  .ap-particle{
+    position:absolute; bottom:-10px; border-radius:50%; opacity:0;
+    box-shadow: 0 0 8px currentColor;
+    animation-name: apRise; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+  }
+  @keyframes apRise{
+    0%{ transform: translateY(0) translateX(0); opacity:0; }
+    12%{ opacity: var(--p-opacity, 0.5); }
+    88%{ opacity: var(--p-opacity, 0.5); }
+    100%{ transform: translateY(-120vh) translateX(var(--p-drift, 20px)); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){ .ap-particle{ animation:none; opacity:0; } }
+
+  .activities-intro, .detail-panel{ position:relative; z-index:1; }
 
   .activities-intro{ max-width: 780px; margin: 0 auto 60px; text-align:center; }
   .activities-intro .intro-label{
@@ -234,60 +352,186 @@
     font-size:15.5px; line-height:1.75; color:#465046; margin-top:16px;
   }
 
-  .activities-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 26px;
-    max-width: 1300px;
-    margin: 0 auto;
+  /* --- dynamic detail panel, swapped by the hero icon switcher --- */
+  .detail-panel{
+    max-width: 1300px; margin: 0 auto;
+    display:flex; flex-direction:column; gap: 22px;
+    transition: opacity 0.22s ease;
   }
 
-  .activity-card{
+  .detail-photo{
     position:relative;
-    padding: 30px 28px 28px;
-    border-radius: 20px;
-    background: var(--card-tint);
-    border: 1px solid var(--card-line);
+    border-radius: 22px;
     overflow:hidden;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+    aspect-ratio: 20 / 9;
+    min-height: 300px;
+    background: var(--ink);
   }
-  .activity-card:hover{ transform: translateY(-6px); box-shadow: 0 30px 50px -20px rgba(23,36,28,0.25); }
-  .activity-card::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:6px; background: var(--card-accent);
+  @media (max-width: 640px){
+    .detail-photo{ aspect-ratio: 3 / 4; }
+  }
+  .detail-photo img{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center 28%;
+  }
+  .detail-photo-tint{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(100deg, rgba(23,36,28,0.55) 0%, rgba(23,36,28,0.05) 30%, rgba(23,36,28,0.05) 66%, rgba(23,36,28,0.85) 100%),
+      linear-gradient(0deg, rgba(23,36,28,0.6) 0%, transparent 42%),
+      linear-gradient(180deg, rgba(23,36,28,0.45) 0%, transparent 22%);
   }
 
-  .cat-rumah{    --card-tint: rgba(185,146,74,0.12); --card-line: rgba(185,146,74,0.28); --card-accent: var(--gold); }
-  .cat-sekolah{  --card-tint: rgba(63,107,74,0.12);  --card-line: rgba(63,107,74,0.28);  --card-accent: var(--sawah); }
-  .cat-masyarakat{ --card-tint: rgba(140,58,50,0.11); --card-line: rgba(140,58,50,0.26); --card-accent: var(--merah); }
-  .cat-bangsa{   --card-tint: rgba(74,107,138,0.12); --card-line: rgba(74,107,138,0.28); --card-accent: var(--biru); }
-
-  .activity-cat-label{
+  /* rotated category type running along the left edge */
+  .dpt-vertical{
+    position:absolute;
+    left: clamp(8px, 2vw, 22px); top:50%;
+    transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
     font-family: var(--font-display);
-    font-size: 13px;
-    letter-spacing: 0.2em;
-    color: var(--card-accent);
-    margin-bottom: 18px;
+    font-weight:400;
+    font-size: clamp(26px, 4vw, 56px);
+    letter-spacing: 0.04em;
+    color: var(--accent, var(--gold));
+    text-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    white-space:nowrap;
   }
 
-  .activity-field{ margin-bottom:16px; }
-  .activity-field .af-label{
-    display:block; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
-    font-weight:700; color: var(--card-accent); opacity:0.9; margin-bottom:4px;
+  /* small tag + dot grid, top right */
+  .dpt-tag{
+    position:absolute; top: 20px; right: clamp(18px, 3.5vw, 40px);
+    display:flex; align-items:flex-start; gap:10px;
   }
-  .activity-field .af-value{
-    display:block; font-size:14px; font-weight:600; color: var(--ink); line-height:1.45;
+  .dpt-tag-text{
+    font-size:10px; letter-spacing:0.2em; text-transform:uppercase; font-weight:700;
+    color: var(--mist); opacity:0.8; text-align:right; line-height:1.6;
+  }
+  .dpt-dots{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:4px; margin-top:2px; flex-shrink:0;
+  }
+  .dpt-dots span{
+    width:4px; height:4px; border-radius:50%; background: var(--accent, var(--gold-soft)); opacity:0.85;
   }
 
-  .activity-levels{ margin-bottom:18px; }
-  .activity-levels .af-label{
-    display:block; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
-    font-weight:700; color: var(--card-accent); opacity:0.9; margin-bottom:12px;
+  /* sparkle corner accents */
+  .dpt-spark{
+    position:absolute; width:16px; height:16px; opacity:0.65; color: var(--mist);
   }
-  .level-row{ margin-bottom:10px; }
-  .level-row:last-child{ margin-bottom:0; }
-  .level-top{ display:flex; justify-content:space-between; font-size:12px; font-weight:600; color:#3A423B; margin-bottom:5px; }
-  .level-bar{ height:7px; border-radius:4px; background: rgba(23,36,28,0.08); overflow:hidden; }
-  .level-fill{ height:100%; border-radius:4px; background: var(--card-accent); }
+  .dpt-spark-1{ top: 20px; left: clamp(60px, 8vw, 100px); }
+  .dpt-spark-2{ bottom: 20px; right: clamp(18px, 3.5vw, 40px); color: var(--accent, var(--gold)); opacity:0.9; }
+
+  /* stacked two-tone title, bottom right */
+  .dpt-title{
+    position:absolute; right: clamp(18px, 3.5vw, 40px); bottom: 20px;
+    max-width: 58%;
+    text-align:right;
+  }
+  .dpt-part{
+    display:block;
+    font-family: var(--font-display);
+    line-height: 1.04;
+    text-shadow: 0 6px 26px rgba(0,0,0,0.55);
+  }
+  .dpt-left{
+    font-size: clamp(21px, 3.4vw, 42px);
+    color: var(--cloud);
+  }
+  .dpt-right{
+    margin-top: 2px;
+    font-size: clamp(13px, 1.9vw, 22px);
+    color: var(--accent, var(--gold-soft));
+    letter-spacing: 0.02em;
+  }
+
+  .detail-boxes{
+    display:grid; grid-template-columns: 1fr 1fr; gap:28px;
+  }
+  @media (max-width: 760px){ .detail-boxes{ grid-template-columns: 1fr; } }
+
+  .box-pancasila{
+    background: linear-gradient(160deg, #2B4A34 0%, var(--ink) 100%);
+    color: var(--mist);
+    border-radius: 22px;
+    padding: 40px 36px;
+  }
+  .box-pancasila h3{
+    font-family: var(--font-display); font-weight:400; letter-spacing:0.02em;
+    color: var(--gold-soft); font-size: 24px; margin-bottom: 18px;
+  }
+  .box-pancasila p{ font-size:16px; line-height:1.85; opacity:0.9; }
+
+  .box-chart{
+    background: linear-gradient(160deg, #F4E8CB 0%, #E9D2A0 100%);
+    color: var(--ink);
+    border-radius: 22px;
+    padding: 40px 36px;
+  }
+  .box-chart h3{
+    font-family: var(--font-display); font-weight:400; letter-spacing:0.02em;
+    color: #6B4F22; font-size: 24px; margin-bottom: 26px;
+  }
+  .chart-row{ display:flex; align-items:center; gap: 32px; flex-wrap:wrap; }
+
+  .pie-wrap{
+    position:relative; width:190px; height:190px; flex-shrink:0;
+    animation: pieSpin 22s linear infinite;
+    will-change: transform;
+  }
+  @keyframes pieSpin{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .pie-wrap{ animation:none; } }
+  .pie-ring{
+    position:absolute; inset:0;
+    border-radius:50%;
+    border: 2px dashed var(--accent, var(--biru));
+    opacity:0.55;
+  }
+  .pie-chart{
+    position:absolute; inset:12px;
+    border-radius:50%;
+    -webkit-mask-image: radial-gradient(circle, transparent 46px, #000 47px);
+    mask-image: radial-gradient(circle, transparent 46px, #000 47px);
+    filter: drop-shadow(0 16px 20px rgba(23,36,28,0.4));
+    transition: background 0.3s ease;
+  }
+  .pie-labels{ position:absolute; inset:12px; pointer-events:none; }
+  .pie-label{
+    position:absolute; top:0; left:0;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-body);
+    font-size: 12px; font-weight:800; letter-spacing:0.03em;
+    color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.45);
+    pointer-events:none;
+    animation: pieLabelCounterSpin 22s linear infinite;
+    will-change: transform;
+  }
+  @keyframes pieLabelCounterSpin{
+    from{ transform: translate(-50%, -50%) rotate(0deg); }
+    to{ transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+  @media (prefers-reduced-motion: reduce){ .pie-label{ animation:none; } }
+
+  .chart-legend{ list-style:none; display:flex; flex-direction:column; gap:14px; flex:1; min-width:190px; }
+  .chart-legend li{ display:flex; flex-direction:column; gap:6px; }
+  .legend-top{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:#3A2F17; }
+  .legend-dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .legend-name{ flex:1; }
+  .legend-val{ font-weight:800; }
+  .legend-bar{ height:6px; border-radius:4px; background: rgba(23,36,28,0.12); overflow:hidden; }
+  .legend-bar-fill{ height:100%; border-radius:4px; transition: width 0.4s ease, background 0.3s ease; }
+
+  .detail-strip{
+    --accent: var(--gold);
+    background: #FFFDF8;
+    border: 1px solid rgba(23,36,28,0.08);
+    border-left: 5px solid var(--accent);
+    border-radius: 18px;
+    padding: 28px 30px;
+    display:flex; flex-direction:column; gap:8px;
+    box-shadow: 0 14px 32px -20px rgba(23,36,28,0.18);
+    transition: border-color 0.3s ease;
+  }
+  .ds-label{ font-size:12px; letter-spacing:0.16em; text-transform:uppercase; font-weight:800; color: var(--accent); }
+  .detail-strip p{ font-size:16px; line-height:1.75; color:#33392F; }
 
   /* ---------- FOOTER ---------- */
   .site-footer{ background: var(--ink); color: var(--mist); padding: 74px clamp(24px, 6vw, 100px) 30px; }
@@ -352,10 +596,14 @@
   </aside>
 
   <!-- ================= 1. SILA HERO ================= -->
-  <section class="sila-hero">
-    <div class="sila-mesh">
-      <div class="sila-mesh-blob sila-mesh-1"></div>
-      <div class="sila-mesh-blob sila-mesh-2"></div>
+  <div class="hero-frame">
+  <section class="sila-hero" id="silaHero">
+    <div class="hero-media">
+      <img class="hero-media-img is-active" data-cat="rumah"      src="img/rumah_s1.jpg"      alt="Kegiatan penerapan Sila IV di rumah">
+      <img class="hero-media-img"           data-cat="sekolah"    src="img/sekolah_s1.jpg"    alt="Kegiatan penerapan Sila IV di sekolah">
+      <img class="hero-media-img"           data-cat="masyarakat" src="img/masyarakat_s1.jpg" alt="Kegiatan penerapan Sila IV di masyarakat">
+      <img class="hero-media-img"           data-cat="bangsa"     src="img/bangsa_s1.jpg"     alt="Kegiatan penerapan Sila IV bagi bangsa dan negara">
+      <div class="hero-media-tint"></div>
     </div>
 
     <div class="sila-eyebrow reveal reveal-delay-1">
@@ -364,127 +612,128 @@
       <span class="eyebrow-line"></span>
     </div>
 
-    <h1 class="sila-title">KERAKYATAN YANG DIPIMPIN OLEH HIKMAT KEBIJAKSANAAN DALAM PERMUSYAWARATAN/PERWAKILAN</h1>
+    <h1 class="sila-title">
+      <span class="st-line st-big">KERAKYATAN YANG DIPIMPIN</span>
+      <span class="st-line st-accent">OLEH HIKMAT KEBIJAKSANAAN DALAM PERMUSYAWARATAN/PERWAKILAN</span>
+    </h1>
 
     <div class="sila-roman-badge reveal reveal-delay-2">IV</div>
+
+    <div class="hero-cat-panel reveal reveal-delay-3">
+      <div class="hero-cat-text">
+        <span class="hero-cat-label" id="heroCatLabel">Rumah</span>
+        <span class="hero-cat-desc" id="heroCatDesc">Berdoa dan Beribadah Bersama Keluarga</span>
+      </div>
+
+      <div class="hero-cat-switch" role="tablist" aria-label="Pilih jenis penerapan Sila IV">
+        <div class="cat-icon-item is-active">
+          <button class="cat-icon-btn" type="button" role="tab" aria-selected="true"
+            data-cat="rumah" data-label="Rumah" data-desc="Berdoa dan Beribadah Bersama Keluarga" aria-label="Rumah">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3.5 11 12 4l8.5 7"/>
+              <path d="M5.5 9.5V19a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1V9.5"/>
+            </svg>
+          </button>
+          <span class="cat-icon-caption">Rumah</span>
+        </div>
+
+        <div class="cat-icon-item">
+          <button class="cat-icon-btn" type="button" role="tab" aria-selected="false"
+            data-cat="sekolah" data-label="Sekolah" data-desc="Mengikuti Ibadah dan Kegiatan Rohani di Sekolah" aria-label="Sekolah">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3 2 8l10 5 10-5-10-5Z"/>
+              <path d="M6 10.5V16c0 1.2 2.7 3 6 3s6-1.8 6-3v-5.5"/>
+              <path d="M20 8v6.5"/>
+            </svg>
+          </button>
+          <span class="cat-icon-caption">Sekolah</span>
+        </div>
+
+        <div class="cat-icon-item">
+          <button class="cat-icon-btn" type="button" role="tab" aria-selected="false"
+            data-cat="masyarakat" data-label="Masyarakat" data-desc="Menghadiri Perayaan Keagamaan di Lingkungan Sekitar" aria-label="Masyarakat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="3.4"/>
+              <path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"/>
+            </svg>
+          </button>
+          <span class="cat-icon-caption">Masyarakat</span>
+        </div>
+
+        <div class="cat-icon-item">
+          <button class="cat-icon-btn" type="button" role="tab" aria-selected="false"
+            data-cat="bangsa" data-label="Bangsa &amp; Negara" data-desc="Menjaga Kerukunan Antarumat Beragama di Indonesia" aria-label="Bangsa dan Negara">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 21V4"/>
+              <path d="M5 4.5c1.7-1.3 3.4-1.3 5.1 0 1.9 1.4 3.9 1.4 5.9 0v8c-2 1.4-4 1.4-5.9 0-1.7-1.3-3.4-1.3-5.1 0Z"/>
+            </svg>
+          </button>
+          <span class="cat-icon-caption">Bangsa</span>
+        </div>
+      </div>
+    </div>
   </section>
+  </div>
 
   <!-- ================= 2. ACTIVITIES SECTION ================= -->
   <section class="activities-section">
+    <div class="activities-glow ag-1"></div>
+    <div class="activities-glow ag-2"></div>
+    <div class="activities-glow ag-3"></div>
+    <div class="activities-particles" id="activitiesParticles"></div>
+
     <div class="activities-intro">
       <div class="intro-label reveal reveal-delay-1"><span class="eyebrow-line"></span> Kegiatan</div>
       <h2 class="reveal reveal-delay-2">Penerapan Sila IV</h2>
       <p class="reveal reveal-delay-3">Sila keempat mengajarkan pentingnya musyawarah mufakat, menghargai pendapat orang lain, dan mengambil keputusan bersama demi kepentingan yang lebih luas.</p>
     </div>
 
-    <div class="activities-grid">
-      <div class="activity-card cat-rumah reveal reveal-delay-1">
-        <div class="activity-cat-label">RUMAH</div>
-        <div class="activity-field">
-          <span class="af-label">Nama Kegiatan</span>
-          <span class="af-value">Musyawarah Keluarga dalam Mengambil Keputusan</span>
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-photo" id="detailPhoto">
+        <img id="detailPhotoImg" src="img/rumah_s1.jpg" alt="Foto dokumentasi kegiatan penerapan Sila IV">
+        <div class="detail-photo-tint"></div>
+
+        <svg class="dpt-spark dpt-spark-1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.6 3.8 1.4 6 3 7.6 1.6 1.6 3.8 2.4 7 3-3.2.6-5.4 1.4-7 3-1.6 1.6-2.4 3.8-3 7.6-.6-3.8-1.4-6-3-7.6-1.6-1.6-3.8-2.4-7-3 3.2-.6 5.4-1.4 7-3 1.6-1.6 2.4-3.8 3-7.6Z"/></svg>
+        <svg class="dpt-spark dpt-spark-2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.6 3.8 1.4 6 3 7.6 1.6 1.6 3.8 2.4 7 3-3.2.6-5.4 1.4-7 3-1.6 1.6-2.4 3.8-3 7.6-.6-3.8-1.4-6-3-7.6-1.6-1.6-3.8-2.4-7-3 3.2-.6 5.4-1.4 7-3 1.6-1.6 2.4-3.8 3-7.6Z"/></svg>
+
+        <span class="dpt-vertical" id="dptVertical">RUMAH</span>
+
+        <div class="dpt-tag">
+          <span class="dpt-tag-text">Dokumentasi<br>Visual · Sila IV</span>
+          <div class="dpt-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
-        <div class="activity-levels">
-          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
-          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Nilai Pancasila</span>
-          <span class="af-value">Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan — musyawarah</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Diri Sendiri</span>
-          <span class="af-value">Melatih kemampuan menyampaikan pendapat dengan baik.</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Orang Lain</span>
-          <span class="af-value">Menghasilkan keputusan yang adil bagi seluruh keluarga.</span>
+
+        <div class="dpt-title">
+          <span class="dpt-part dpt-left" id="dptLeft">Berdoa dan</span>
+          <span class="dpt-part dpt-right" id="dptRight">Beribadah Bersama Keluarga</span>
         </div>
       </div>
-      <div class="activity-card cat-sekolah reveal reveal-delay-1">
-        <div class="activity-cat-label">SEKOLAH</div>
-        <div class="activity-field">
-          <span class="af-label">Nama Kegiatan</span>
-          <span class="af-value">Aktif dalam Musyawarah OSIS/Kelas</span>
+
+      <div class="detail-boxes">
+        <div class="box-pancasila">
+          <h3>Penerapan Pancasila</h3>
+          <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
         </div>
-        <div class="activity-levels">
-          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
-          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Nilai Pancasila</span>
-          <span class="af-value">Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan — perwakilan</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Diri Sendiri</span>
-          <span class="af-value">Mengasah kemampuan berpikir kritis dan berbicara di depan umum.</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Orang Lain</span>
-          <span class="af-value">Mewakili aspirasi teman-teman sekelas.</span>
+        <div class="box-chart">
+          <h3>Kekuatan Sikap &amp; Perilaku</h3>
+          <div class="chart-row">
+            <div class="pie-wrap">
+              <div class="pie-ring"></div>
+              <div class="pie-chart" id="pieChart"></div>
+              <div class="pie-labels" id="pieLabels"></div>
+            </div>
+            <ul class="chart-legend" id="chartLegend"></ul>
+          </div>
         </div>
       </div>
-      <div class="activity-card cat-masyarakat reveal reveal-delay-1">
-        <div class="activity-cat-label">MASYARAKAT</div>
-        <div class="activity-field">
-          <span class="af-label">Nama Kegiatan</span>
-          <span class="af-value">Mengikuti Rapat Warga/RT</span>
-        </div>
-        <div class="activity-levels">
-          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
-          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Nilai Pancasila</span>
-          <span class="af-value">Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan — musyawarah warga</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Diri Sendiri</span>
-          <span class="af-value">Melatih partisipasi aktif dalam kehidupan bermasyarakat.</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Orang Lain</span>
-          <span class="af-value">Membantu tercapainya keputusan yang disepakati bersama.</span>
-        </div>
+
+      <div class="detail-strip" id="stripDiri">
+        <span class="ds-label">Dampak bagi Diri Sendiri</span>
+        <p id="dampakDiri"></p>
       </div>
-      <div class="activity-card cat-bangsa reveal reveal-delay-1">
-        <div class="activity-cat-label">BANGSA & BERNEGARA</div>
-        <div class="activity-field">
-          <span class="af-label">Nama Kegiatan</span>
-          <span class="af-value">Menggunakan Hak Pilih dalam Pemilu</span>
-        </div>
-        <div class="activity-levels">
-          <span class="af-label">Kekuatan Sikap &amp; Perilaku</span>
-          <div class="level-row"><div class="level-top"><span>Kejujuran</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Komitmen</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Kreativitas</span><span>6/10</span></div><div class="level-bar"><div class="level-fill" style="width:60%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Tanggung Jawab</span><span>8/10</span></div><div class="level-bar"><div class="level-fill" style="width:80%"></div></div></div>
-            <div class="level-row"><div class="level-top"><span>Toleransi</span><span>7/10</span></div><div class="level-bar"><div class="level-fill" style="width:70%"></div></div></div>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Nilai Pancasila</span>
-          <span class="af-value">Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan — demokrasi</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Diri Sendiri</span>
-          <span class="af-value">Menumbuhkan kesadaran berdemokrasi sebagai warga negara.</span>
-        </div>
-        <div class="activity-field">
-          <span class="af-label">Manfaat bagi Orang Lain</span>
-          <span class="af-value">Menentukan arah kepemimpinan bangsa ke depan.</span>
-        </div>
+      <div class="detail-strip" id="stripOrang">
+        <span class="ds-label">Dampak bagi Orang Sekitar</span>
+        <p id="dampakOrang"></p>
       </div>
     </div>
   </section>
@@ -610,6 +859,206 @@
         cursorGlow.classList.remove('active'); cursorDot.classList.remove('active');
       });
       requestAnimationFrame(renderCursor);
+    }
+
+    // hero category switcher (rumah / sekolah / masyarakat / bangsa)
+    const catData = {
+      rumah: {
+        label: 'Rumah', img: 'img/rumah_s1.jpg',
+        title: 'Musyawarah Keluarga dalam Mengambil Keputusan',
+        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.',
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
+        diri: 'Melatih kemampuan menyampaikan pendapat dengan baik.',
+        orang: 'Menghasilkan keputusan yang adil bagi seluruh keluarga.',
+        accent: 'var(--gold)'
+      },
+      sekolah: {
+        label: 'Sekolah', img: 'img/sekolah_s1.jpg',
+        title: 'Aktif dalam Musyawarah OSIS/Kelas',
+        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante dapibus diam facilisis, at fringilla nunc facilisis.',
+        levels: [ ['Kejujuran',7], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',8], ['Toleransi',7] ],
+        diri: 'Mengasah kemampuan berpikir kritis dan berbicara di depan umum.',
+        orang: 'Mewakili aspirasi teman-teman sekelas.',
+        accent: 'var(--sawah)'
+      },
+      masyarakat: {
+        label: 'Masyarakat', img: 'img/masyarakat_s1.jpg',
+        title: 'Mengikuti Rapat Warga/RT',
+        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent libero sed cursus ante dapibus diam nec odio.',
+        levels: [ ['Kejujuran',7], ['Komitmen',7], ['Kreativitas',6], ['Tanggung Jawab',7], ['Toleransi',8] ],
+        diri: 'Melatih partisipasi aktif dalam kehidupan bermasyarakat.',
+        orang: 'Membantu tercapainya keputusan yang disepakati bersama.',
+        accent: 'var(--merah)'
+      },
+      bangsa: {
+        label: 'Bangsa & Negara', img: 'img/bangsa_s1.jpg',
+        title: 'Menggunakan Hak Pilih dalam Pemilu',
+        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nec odio praesent libero sed cursus ante dapibus diam.',
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',7] ],
+        diri: 'Menumbuhkan kesadaran berdemokrasi sebagai warga negara.',
+        orang: 'Menentukan arah kepemimpinan bangsa ke depan.',
+        accent: 'var(--biru)'
+      }
+    };
+
+    const metricColors = {
+      'Kejujuran': 'var(--gold)',
+      'Komitmen': 'var(--sawah)',
+      'Kreativitas': 'var(--biru)',
+      'Tanggung Jawab': 'var(--merah)',
+      'Toleransi': 'var(--ungu)'
+    };
+
+    const metricAbbr = {
+      'Kejujuran': 'KEJ',
+      'Komitmen': 'KOM',
+      'Kreativitas': 'KRE',
+      'Tanggung Jawab': 'TJ',
+      'Toleransi': 'TOL'
+    };
+
+    const catButtons = document.querySelectorAll('.cat-icon-btn');
+    const heroImages = document.querySelectorAll('.hero-media-img');
+    const heroCatLabel = document.getElementById('heroCatLabel');
+    const heroCatDesc = document.getElementById('heroCatDesc');
+
+    const detailPanel = document.getElementById('detailPanel');
+    const detailPhoto = document.getElementById('detailPhoto');
+    const detailPhotoImg = document.getElementById('detailPhotoImg');
+    const dptVertical = document.getElementById('dptVertical');
+    const dptLeft = document.getElementById('dptLeft');
+    const dptRight = document.getElementById('dptRight');
+    const pancasilaDesc = document.getElementById('pancasilaDesc');
+    const pieChart = document.getElementById('pieChart');
+    const pieWrap = document.querySelector('.pie-wrap');
+    const pieLabels = document.getElementById('pieLabels');
+    const chartLegend = document.getElementById('chartLegend');
+    const dampakDiri = document.getElementById('dampakDiri');
+    const dampakOrang = document.getElementById('dampakOrang');
+    const stripDiri = document.getElementById('stripDiri');
+    const stripOrang = document.getElementById('stripOrang');
+
+    function renderCategory(key){
+      const d = catData[key];
+
+      detailPhotoImg.src = d.img;
+      detailPhoto.style.setProperty('--accent', d.accent);
+      dptVertical.textContent = d.label.toUpperCase();
+
+      const words = d.title.split(' ');
+      const mid = Math.ceil(words.length / 2);
+      dptLeft.textContent = words.slice(0, mid).join(' ');
+      dptRight.textContent = words.slice(mid).join(' ');
+
+      pancasilaDesc.textContent = d.pancasila;
+      dampakDiri.textContent = d.diri;
+      dampakOrang.textContent = d.orang;
+
+      stripDiri.style.setProperty('--accent', d.accent);
+      stripOrang.style.setProperty('--accent', d.accent);
+      pieWrap.style.setProperty('--accent', d.accent);
+
+      const total = d.levels.reduce((sum, l) => sum + l[1], 0);
+      const cx = 83, cy = 83, labelRadius = 65; // matches .pie-chart geometry (166px, ring band ~46-83px)
+      let cursor = 0;
+      const stops = [];
+      const labels = [];
+
+      d.levels.forEach(([name, val], i) => {
+        const pct = (val / total) * 100;
+        stops.push(`${metricColors[name]} ${cursor}% ${cursor + pct}%`);
+
+        const midDeg = (cursor + pct / 2) / 100 * 360;
+        const rad = midDeg * Math.PI / 180;
+        const x = cx + labelRadius * Math.sin(rad);
+        const y = cy - labelRadius * Math.cos(rad);
+        labels.push(`<span class="pie-label" style="left:${x}px; top:${y}px;">${metricAbbr[name]}</span>`);
+
+        cursor += pct;
+      });
+
+      pieChart.style.background = `conic-gradient(${stops.join(', ')})`;
+      pieLabels.innerHTML = labels.join('');
+
+      chartLegend.innerHTML = d.levels.map(([name, val]) => `
+        <li>
+          <div class="legend-top">
+            <span class="legend-dot" style="background:${metricColors[name]}"></span>
+            <span class="legend-name">${name}</span>
+            <span class="legend-val">${val}/10</span>
+          </div>
+          <div class="legend-bar">
+            <div class="legend-bar-fill" style="width:${val * 10}%; background:${metricColors[name]}"></div>
+          </div>
+        </li>
+      `).join('');
+    }
+
+    catButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        if (btn.parentElement.classList.contains('is-active')) return;
+
+        catButtons.forEach((b) => {
+          const active = b === btn;
+          b.parentElement.classList.toggle('is-active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+
+        heroImages.forEach((img) => {
+          img.classList.toggle('is-active', img.dataset.cat === cat);
+        });
+
+        heroCatLabel.textContent = btn.dataset.label;
+        heroCatDesc.textContent = btn.dataset.desc;
+
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) {
+          renderCategory(cat);
+        } else {
+          detailPanel.style.opacity = 0;
+          setTimeout(() => {
+            renderCategory(cat);
+            detailPanel.style.opacity = 1;
+          }, 180);
+        }
+      });
+    });
+
+    renderCategory('rumah');
+
+    // floating particles in the activities section background
+    const activitiesParticles = document.getElementById('activitiesParticles');
+    const prefersReducedMotionAmbient = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (activitiesParticles && !prefersReducedMotionAmbient) {
+      const particleColors = ['#D8C08B', '#8FADC7', '#A98DB8', '#6E9B78', '#B9924A'];
+      const particleCount = 42;
+
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement('div');
+        p.className = 'ap-particle';
+
+        const size = (Math.random() * 5 + 3).toFixed(1);
+        const left = (Math.random() * 100).toFixed(1);
+        const duration = (Math.random() * 14 + 12).toFixed(1);
+        const delay = (Math.random() * -duration).toFixed(1);
+        const drift = (Math.random() * 140 - 70).toFixed(0);
+        const opacity = (Math.random() * 0.4 + 0.5).toFixed(2);
+        const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = left + '%';
+        p.style.background = color;
+        p.style.color = color;
+        p.style.animationDuration = duration + 's';
+        p.style.animationDelay = delay + 's';
+        p.style.setProperty('--p-drift', drift + 'px');
+        p.style.setProperty('--p-opacity', opacity);
+
+        activitiesParticles.appendChild(p);
+      }
     }
 
     // scroll-triggered reveal
