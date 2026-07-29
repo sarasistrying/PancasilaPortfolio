@@ -131,9 +131,13 @@
   }
   .cursor-glow.active{ opacity:1; }
   .cursor-dot{
-    display:none; position:fixed; top:0; left:0; width:8px; height:8px; border-radius:50%;
-    background: var(--gold-soft); pointer-events:none; z-index:10000;
-    transform: translate(-50%, -50%); will-change: transform; opacity:0; transition: opacity 0.35s ease;
+    display:none; position:fixed; top:0; left:0;
+    width:30px; height:30px; border-radius:50%;
+    background: radial-gradient(circle at 32% 26%, rgba(255,250,235,0.95) 0%, rgba(230,205,150,0.92) 22%, rgba(216,192,139,0.88) 45%, rgba(185,146,74,0.85) 68%, rgba(120,90,45,0.75) 100%);
+    box-shadow: inset -4px -6px 8px rgba(60,40,10,0.45), inset 3px 4px 6px rgba(255,255,255,0.55), 0 6px 14px rgba(23,36,28,0.4);
+    pointer-events:none; z-index:10000;
+    transform: translate(-50%, -50%); will-change: transform; opacity:0;
+    transition: opacity 0.35s ease;
   }
   .cursor-dot.active{ opacity:1; }
   @media (hover: hover) and (pointer: fine){
@@ -549,6 +553,68 @@
   .footer-col a:hover{ color: var(--gold-soft); opacity:1; padding-left:4px; }
   .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding-top:26px; font-size:12.5px; opacity:0.6; }
   @media (max-width: 640px){ .footer-top{ flex-direction:column; } .footer-bottom{ flex-direction:column; align-items:flex-start; } }
+
+  /* ---------- MUSIC PLAYER ---------- */
+  .music-player{
+    position:fixed; right:24px; bottom:24px; z-index:150;
+    display:flex; align-items:center; gap:12px;
+    background: rgba(23,36,28,0.92);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(216,192,139,0.28);
+    border-radius:999px;
+    padding:10px 20px 10px 10px;
+    box-shadow: 0 18px 40px -14px rgba(0,0,0,0.5);
+    max-width: min(300px, calc(100vw - 40px));
+    cursor:pointer;
+  }
+  .music-toggle{
+    flex-shrink:0; width:38px; height:38px; border-radius:50%;
+    background: var(--gold); color: var(--ink); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform 0.25s ease;
+  }
+  .music-toggle:hover{ transform:scale(1.08); }
+  .music-toggle svg{ width:15px; height:15px; }
+  .music-icon-pause{ display:none; }
+  .music-player.is-playing .music-icon-play{ display:none; }
+  .music-player.is-playing .music-icon-pause{ display:block; }
+  .music-info{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .music-bars{ display:flex; align-items:flex-end; gap:2px; height:14px; flex-shrink:0; }
+  .music-bars span{
+    width:3px; border-radius:2px; opacity:0.4;
+    animation: musicBar 0.9s ease-in-out infinite; animation-play-state:paused;
+  }
+  .music-bars span:nth-child(1){ height:6px; animation-delay:0s; background: var(--gold); }
+  .music-bars span:nth-child(2){ height:14px; animation-delay:0.2s; background: var(--sawah-light); }
+  .music-bars span:nth-child(3){ height:9px; animation-delay:0.4s; background: var(--biru); }
+  .music-player.is-playing .music-bars span{ opacity:1; animation-play-state:running; }
+  @keyframes musicBar{ 0%, 100%{ transform:scaleY(0.4); } 50%{ transform:scaleY(1); } }
+  .music-title-mask{
+    position:relative; overflow:hidden; width:170px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 18%, black 82%, transparent 100%);
+  }
+  .music-title-track{
+    display:flex; width:max-content;
+    animation: musicTitleScroll 13s linear infinite;
+    animation-play-state: paused;
+  }
+  .music-player.is-playing .music-title-track{ animation-play-state: running; }
+  .music-title{
+    display:inline-block; white-space:nowrap; padding-right:44px;
+    font-size:12.5px; font-weight:600; color: var(--cloud);
+  }
+  @keyframes musicTitleScroll{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .music-title-track{ animation:none; }
+  }
+  @media (max-width:560px){
+    .music-player{ right:14px; bottom:14px; padding:8px 16px 8px 8px; }
+    .music-title-mask{ width:110px; }
+  }
 </style>
 </head>
 <body>
@@ -782,6 +848,25 @@
 
   <div class="cursor-glow" id="cursorGlow"></div>
   <div class="cursor-dot" id="cursorDot"></div>
+  <div class="music-player" id="musicPlayer" role="button" tabindex="0" aria-label="Putar atau jeda musik latar">
+    <button class="music-toggle" id="musicToggle" aria-label="Putar/jeda musik" tabindex="-1">
+      <svg class="music-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="music-icon-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+    </button>
+    <div class="music-info">
+      <span class="music-bars"><span></span><span></span><span></span></span>
+      <div class="music-title-mask">
+        <div class="music-title-track" id="musicTitleTrack">
+          <span class="music-title">Heart of Nusantara &mdash; Cinematic Orchestral</span>
+          <span class="music-title" aria-hidden="true">Heart of Nusantara &mdash; Cinematic Orchestral</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <audio id="bgAudio" loop preload="auto">
+    <source src="img/music.mp3" type="audio/mpeg">
+  </audio>
+
 
   <script>
     const navbar = document.getElementById('navbar');
@@ -873,7 +958,7 @@
         images: ['img/sila5/dokumrumah1.jpeg', 'img/sila5/dokumrumah2.jpeg'],
         title: 'Membagi Tugas Rumah Secara Adil',
         pancasila: 'Menjunjung nilai keadilan melalui pembagian beban kerja yang setara dan menghargai hak anggota keluarga lain untuk beristirahat.',
-        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',9], ['Toleransi',7] ],
         diri: 'Meringankan beban kerja orang tua dan menciptakan suasana rumah yang rukun.',
         orang: 'Membentuk sikap bertanggung jawab atas tugas yang ada dan terbiasa bekerja sama.',
         accent: 'var(--gold)'
@@ -882,7 +967,7 @@
         label: 'Sekolah', img: 'img/sila5/dokumsekolah.jpeg',
         title: 'Piket Kelas',
         pancasila: 'Menjalankan kewajiban bersama dalam menjaga kebersihan kelas sesuai jadwal yang sudah ditentukan.',
-        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        levels: [ ['Kejujuran',8], ['Komitmen',7], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
         diri: 'Teman-teman dan guru nyaman saat proses belajar mengajar karena kelas bersih.',
         orang: 'Meningkatkan rasa kepedulian terhadap kebersihan lingkungan dan membangun jiwa gotong-royong.',
         accent: 'var(--sawah)'
@@ -891,16 +976,16 @@
         label: 'Masyarakat', img: 'img/sila5/dokummasyarakat.jpeg',
         title: 'Antri Dengan Tertib',
         pancasila: 'Belajar menghargai hak orang lain yang sudah datang terlebih dahulu, serta menjaga ketertiban dan kenyamanan bersama.',
-        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        levels: [ ['Kejujuran',9], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
         diri: 'Melatih kesabaran diri dan kebiasaan taat aturan.',
         orang: 'Suasana di tempat umum menjadi nyaman, teratur, serta semua orang merasa dihargai.',
         accent: 'var(--merah)'
       },
       bangsa: {
         label: 'Bangsa & Negara', img: 'img/bangsa_s1.jpg', video: 'img/sila5/dokumnegara.mp4',
-        title: 'Menjaga Fasilitas Umum',
+        title: 'Menjaga Fasilitas Milik Bersama',
         pancasila: 'Mengembangkan kepedulian dalam menjaga barang/sarana milik bersama.',
-        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
         diri: 'Menumbuhkan kepedulian dan sense of belonging terhadap fasilitas/sarana/barang milik bersama.',
         orang: 'Semua orang dapat merasakan fasilitas dengan nyaman karena masih berfungsi baik, serta tahan lama.',
         accent: 'var(--biru)'
@@ -1134,6 +1219,66 @@
       });
     }, { threshold: 0.15 });
     revealEls.forEach((el) => revealObserver.observe(el));
+  
+    // background music player
+    const musicPlayer = document.getElementById('musicPlayer');
+    const musicToggle = document.getElementById('musicToggle');
+    const bgAudio = document.getElementById('bgAudio');
+    bgAudio.volume = 0.8;
+
+    let userPaused = false;
+
+    function toggleMusic(){
+      if (bgAudio.paused) {
+        userPaused = false;
+        bgAudio.muted = false;
+        bgAudio.play().catch(() => {});
+        musicPlayer.classList.add('is-playing');
+      } else {
+        userPaused = true;
+        bgAudio.pause();
+        musicPlayer.classList.remove('is-playing');
+      }
+    }
+
+    musicToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMusic();
+    });
+    musicPlayer.addEventListener('click', toggleMusic);
+    musicPlayer.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMusic();
+      }
+    });
+
+    // Autoplay: browsers universally allow autoplay when muted, so start muted
+    // then unmute right away (or on the first bit of page interaction as a
+    // fallback for stricter browsers). Manual pause always wins over this.
+    function unmuteMusic(){
+      if (userPaused || !bgAudio.muted) return;
+      bgAudio.muted = false;
+      if (bgAudio.paused) {
+        bgAudio.play().catch(() => {});
+      }
+      musicPlayer.classList.add('is-playing');
+    }
+
+    function tryAutoplayMusic(){
+      bgAudio.muted = true;
+      bgAudio.play()
+        .then(() => {
+          musicPlayer.classList.add('is-playing');
+          setTimeout(unmuteMusic, 250);
+        })
+        .catch(() => {});
+
+      ['pointerdown', 'click', 'keydown', 'touchstart', 'scroll', 'wheel'].forEach((evt) => {
+        document.addEventListener(evt, unmuteMusic, { once: true, passive: true });
+      });
+    }
+    tryAutoplayMusic();
   </script>
 
 </body>
