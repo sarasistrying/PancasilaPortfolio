@@ -370,9 +370,12 @@
   @media (max-width: 640px){
     .detail-photo{ aspect-ratio: 3 / 4; }
   }
-  .detail-photo img{
+  .detail-photo img, .detail-photo video{
     position:absolute; inset:0; width:100%; height:100%;
     object-fit:cover; object-position:center 28%;
+  }
+  .detail-photo img{
+    transition: opacity 1.2s ease;
   }
   .detail-photo-tint{
     position:absolute; inset:0;
@@ -691,6 +694,8 @@
     <div class="detail-panel" id="detailPanel">
       <div class="detail-photo" id="detailPhoto">
         <img id="detailPhotoImg" src="img/rumah_s1.jpg" alt="Foto dokumentasi kegiatan penerapan Sila V">
+        <img id="detailPhotoImg2" src="" alt="" style="opacity:0; display:none;">
+        <video id="detailPhotoVideo" muted loop playsinline style="display:none;"></video>
         <div class="detail-photo-tint"></div>
 
         <svg class="dpt-spark dpt-spark-1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.6 3.8 1.4 6 3 7.6 1.6 1.6 3.8 2.4 7 3-3.2.6-5.4 1.4-7 3-1.6 1.6-2.4 3.8-3 7.6-.6-3.8-1.4-6-3-7.6-1.6-1.6-3.8-2.4-7-3 3.2-.6 5.4-1.4 7-3 1.6-1.6 2.4-3.8 3-7.6Z"/></svg>
@@ -865,38 +870,39 @@
     const catData = {
       rumah: {
         label: 'Rumah', img: 'img/sila5/dokumrumah1.jpeg',
+        images: ['img/sila5/dokumrumah1.jpeg', 'img/sila5/dokumrumah2.jpeg'],
         title: 'Membagi Tugas Rumah Secara Adil',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.',
-        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',9], ['Toleransi',7] ],
-        diri: 'Melatih tanggung jawab dan kedisiplinan.',
-        orang: 'Meringankan beban bersama secara merata.',
+        pancasila: 'Menjunjung nilai keadilan melalui pembagian beban kerja yang setara dan menghargai hak anggota keluarga lain untuk beristirahat.',
+        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        diri: 'Meringankan beban kerja orang tua dan menciptakan suasana rumah yang rukun.',
+        orang: 'Membentuk sikap bertanggung jawab atas tugas yang ada dan terbiasa bekerja sama.',
         accent: 'var(--gold)'
       },
       sekolah: {
         label: 'Sekolah', img: 'img/sila5/dokumsekolah.jpeg',
-        title: 'Membantu Teman yang Kesulitan Belajar',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante dapibus diam facilisis, at fringilla nunc facilisis.',
-        levels: [ ['Kejujuran',8], ['Komitmen',7], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Memperdalam pemahaman materi melalui berbagi ilmu.',
-        orang: 'Membantu teman mencapai hasil belajar yang lebih baik.',
+        title: 'Piket Kelas',
+        pancasila: 'Menjalankan kewajiban bersama dalam menjaga kebersihan kelas sesuai jadwal yang sudah ditentukan.',
+        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        diri: 'Teman-teman dan guru nyaman saat proses belajar mengajar karena kelas bersih.',
+        orang: 'Meningkatkan rasa kepedulian terhadap kebersihan lingkungan dan membangun jiwa gotong-royong.',
         accent: 'var(--sawah)'
       },
       masyarakat: {
-        label: 'Masyarakat', img: 'img/masyarakat_s1.jpg',
-        title: 'Menyumbang untuk Warga Kurang Mampu',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent libero sed cursus ante dapibus diam nec odio.',
-        levels: [ ['Kejujuran',9], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Menumbuhkan rasa syukur dan empati.',
-        orang: 'Meringankan beban ekonomi warga yang membutuhkan.',
+        label: 'Masyarakat', img: 'img/sila5/dokummasyarakat.jpeg',
+        title: 'Antri Dengan Tertib',
+        pancasila: 'Belajar menghargai hak orang lain yang sudah datang terlebih dahulu, serta menjaga ketertiban dan kenyamanan bersama.',
+        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        diri: 'Melatih kesabaran diri dan kebiasaan taat aturan.',
+        orang: 'Suasana di tempat umum menjadi nyaman, teratur, serta semua orang merasa dihargai.',
         accent: 'var(--merah)'
       },
       bangsa: {
-        label: 'Bangsa & Negara', img: 'img/bangsa_s1.jpg',
-        title: 'Mendukung Program Pemerataan Kesejahteraan',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nec odio praesent libero sed cursus ante dapibus diam.',
-        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Memperluas wawasan tentang isu sosial nasional.',
-        orang: 'Mendorong kesejahteraan yang lebih merata bagi bangsa.',
+        label: 'Bangsa & Negara', img: 'img/bangsa_s1.jpg', video: 'img/sila5/dokumnegara.mp4',
+        title: 'Menjaga Fasilitas Umum',
+        pancasila: 'Mengembangkan kepedulian dalam menjaga barang/sarana milik bersama.',
+        levels: [ ['Kejujuran',9], ['Komitmen',9], ['Kreativitas',8], ['Tanggung Jawab',10], ['Toleransi',9] ],
+        diri: 'Menumbuhkan kepedulian dan sense of belonging terhadap fasilitas/sarana/barang milik bersama.',
+        orang: 'Semua orang dapat merasakan fasilitas dengan nyaman karena masih berfungsi baik, serta tahan lama.',
         accent: 'var(--biru)'
       }
     };
@@ -925,6 +931,8 @@
     const detailPanel = document.getElementById('detailPanel');
     const detailPhoto = document.getElementById('detailPhoto');
     const detailPhotoImg = document.getElementById('detailPhotoImg');
+    const detailPhotoImg2 = document.getElementById('detailPhotoImg2');
+    const detailPhotoVideo = document.getElementById('detailPhotoVideo');
     const dptVertical = document.getElementById('dptVertical');
     const dptLeft = document.getElementById('dptLeft');
     const dptRight = document.getElementById('dptRight');
@@ -937,11 +945,65 @@
     const dampakOrang = document.getElementById('dampakOrang');
     const stripDiri = document.getElementById('stripDiri');
     const stripOrang = document.getElementById('stripOrang');
+    const prefersReducedMotionPhoto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let photoSlideshowTimer = null;
+
+    function stopPhotoSlideshow(){
+      if (photoSlideshowTimer) {
+        clearInterval(photoSlideshowTimer);
+        photoSlideshowTimer = null;
+      }
+      detailPhotoImg2.style.display = 'none';
+      detailPhotoImg2.style.opacity = 0;
+    }
+
+    function startPhotoSlideshow(images){
+      detailPhotoImg.style.opacity = 1;
+      detailPhotoImg.src = images[0];
+
+      if (prefersReducedMotionPhoto || images.length < 2) return;
+
+      detailPhotoImg2.style.display = 'block';
+      let index = 0;
+      let showingSecond = false;
+
+      photoSlideshowTimer = setInterval(() => {
+        index = (index + 1) % images.length;
+        const incoming = showingSecond ? detailPhotoImg : detailPhotoImg2;
+        const outgoing = showingSecond ? detailPhotoImg2 : detailPhotoImg;
+        incoming.src = images[index];
+        incoming.style.opacity = 1;
+        outgoing.style.opacity = 0;
+        showingSecond = !showingSecond;
+      }, 4000);
+    }
 
     function renderCategory(key){
       const d = catData[key];
 
-      detailPhotoImg.src = d.img;
+      stopPhotoSlideshow();
+
+      if (d.video) {
+        detailPhotoImg.style.display = 'none';
+        detailPhotoVideo.style.display = 'block';
+        if (detailPhotoVideo.getAttribute('src') !== d.video) {
+          detailPhotoVideo.src = d.video;
+        }
+        detailPhotoVideo.play().catch(() => {});
+      } else {
+        detailPhotoVideo.pause();
+        detailPhotoVideo.style.display = 'none';
+        detailPhotoImg.style.display = 'block';
+
+        if (d.images && d.images.length > 1) {
+          startPhotoSlideshow(d.images);
+        } else {
+          detailPhotoImg.style.opacity = 1;
+          detailPhotoImg.src = d.img;
+        }
+      }
+
       detailPhoto.style.setProperty('--accent', d.accent);
       dptVertical.textContent = d.label.toUpperCase();
 

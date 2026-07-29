@@ -695,11 +695,18 @@
     font-size:12px; letter-spacing:0.18em; text-transform:uppercase; font-weight:800;
     color: var(--card-accent); margin-bottom:14px;
   }
-  .member-hello{
+  .member-hello{ margin-bottom:10px; }
+  .member-hello-greet{
+    display:block;
     font-family: var(--font-display); font-weight:400;
-    font-size: clamp(28px, 3.6vw, 44px); color: var(--ink); line-height:1.1; margin-bottom:10px;
+    font-size: clamp(32px, 4vw, 50px); color: var(--ink); line-height:1.05;
   }
-  .member-hello .accent{ color: var(--card-accent); }
+  .member-hello-name{
+    display:block;
+    font-family: var(--font-display); font-weight:400;
+    font-size: clamp(20px, 2.4vw, 30px); color: var(--card-accent); line-height:1.15;
+    margin-top:4px;
+  }
   .member-motto{
     font-family: var(--font-quote); font-style:italic; font-weight:600;
     font-size:14.5px; color:#4B534A; margin-bottom:26px;
@@ -751,6 +758,21 @@
     display:flex; align-items:center; justify-content:center;
     font-family: var(--font-display); font-size: clamp(42px, 7vw, 66px);
     color: rgba(255,255,255,0.85);
+    overflow:visible;
+  }
+  .member-photo-img-wrap{
+    position:absolute; inset:7%; z-index:2; border-radius:50%;
+    overflow:hidden;
+    box-shadow:
+      0 22px 38px -12px rgba(23,36,28,0.55),
+      0 6px 14px -4px rgba(23,36,28,0.4),
+      0 0 0 5px rgba(255,255,255,0.55);
+    background: var(--card-accent);
+  }
+  .member-photo-img{
+    width:100%; height:100%; object-fit:cover; object-position: center 12%;
+    display:block;
+    transition: opacity 0.3s ease;
   }
 
   .member-dots{ position:relative; z-index:1; display:flex; justify-content:center; gap:10px; margin-top:38px; }
@@ -964,7 +986,10 @@
       <div class="member-card" id="memberCard">
         <div class="member-card-left">
           <div class="member-tag" id="memberTag">XII-2 / No. 1</div>
-          <h3 class="member-hello">Hello!, I&rsquo;m <span class="accent" id="memberName">Nama Anggota 1</span></h3>
+          <h3 class="member-hello">
+            <span class="member-hello-greet">Hello! I&rsquo;m</span>
+            <span class="member-hello-name" id="memberName">Nama Anggota 1</span>
+          </h3>
           <p class="member-motto" id="memberMotto">&ldquo;Gagal itu biasa, menyerah itu pilihan.&rdquo;</p>
 
           <div class="member-fields-grid" id="memberFields"></div>
@@ -980,7 +1005,11 @@
         <div class="member-card-right">
           <div class="member-photo-glow"></div>
           <div class="member-photo-ring"></div>
-          <div class="member-photo-circle" id="memberPhoto">1</div>
+          <div class="member-photo-circle" id="memberPhoto">
+            <div class="member-photo-img-wrap">
+              <img class="member-photo-img" id="memberPhotoImg" src="img/pfp_claresta.png" alt="Foto profil anggota">
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1185,35 +1214,35 @@
         ttl: 'Jakarta. 17 Desember 2008', alamat: 'Jln Bintara 17 kav Tower no 131 Rt 002/013',
         tokoh: 'Bunda Teresa', buku: 'The Alpha Girls',
         desc: 'Bunda teresa mengajarkan kita untuk saling mengasihi tanpa memandang latar belakang,agama,atau pun suku.',
-        accent: 'var(--gold)', sila: 1
+        accent: 'var(--gold)', sila: 1, photo: 'img/pfp_claresta.png', absen: '08'
       },
       {
         name: 'Kezia Siregar', motto: '&ldquo;All things great are wound of with all things little.&rdquo;',
         ttl: 'Jakarta, 2 November 2009', alamat: 'Jl. Itudah Pokoknya Siapa Ya',
         tokoh: 'Malala Yousafzai', buku: 'Anne of Green Gables',
         desc: 'Memiliki semangat untuk terus belajar dan memperluas wawasan agar dapat menjadi pribadi yang mandiri, bijaksana, dan bermanfaat bagi keluarga serta masyarakat. Berusaha mengamalkan nilai-nilai Pancasila melalui kerja keras, tanggung jawab, dan kepedulian terhadap sesama.',
-        accent: 'var(--sawah)', sila: 2
+        accent: 'var(--sawah)', sila: 2, photo: 'img/pfp_kezia.png', absen: '23'
       },
       {
         name: 'Komang Saraswati Vidya Kesawa', motto: '&ldquo;You Just Need Someone to be Brave For&rdquo;',
         ttl: 'Leicester, 10 Maret 2009', alamat: 'Jl. Elang Thainesia 2 No. 11/C2',
         tokoh: 'Alyssa Liu', buku: 'Harry Potter and the Philosopher\'s Stone',
         desc: 'Jalan yang dapat diambil itu banyak, namun usaha yang dituangkan adalah kunci untuk mencapai tujuan. Sehingga jangan minder ketika ujung jalan belum pasti, karena semua ada hasilnya.',
-        accent: 'var(--sawah-light)', sila: 3
+        accent: 'var(--sawah-light)', sila: 3, photo: 'img/pfp_saras.png', absen: '24'
       },
       {
         name: 'Sabria Caroline Ginting', motto: '&ldquo;Setiap lompatan hidup bisa dilewat, hanya perlu kesabaran dan waktu yang tepat.&rdquo;',
         ttl: 'Jakarta, 10 Juni 2009', alamat: 'Jl. Merpati No.9, RT.003/RW.002, Jatimakmur, Pondok Gede',
         tokoh: 'Liam Layton (The Plant Slant)', buku: 'Buku Sherlock Holmes',
         desc: 'Mau terbuka dan belajar tentang perubahan-perubahan yang ada di dunia, tetapi mengikuti yang berdasar pancasila. Ingin lebih mendalami pancasila dan melakukannya dengan sepenuh hati saya untuk sendiri dan sesama.',
-        accent: 'var(--biru)', sila: 4
+        accent: 'var(--biru)', sila: 4, photo: 'img/pfp_sabria.png', absen: '31'
       },
       {
         name: 'Aiko Zaneta Lumban Tobing', motto: '&ldquo;Bersatu kita teguh.&rdquo;',
         ttl: 'Jakarta, 13 Oktober 2008', alamat: 'Jl. SMA 48 RT.10 RW.01 Pinang Ranti, Makasar',
         tokoh: 'Hayao Miyazaki ', buku: 'Howl\'s Moving Castle',
         desc: 'Deskripsi diri: Saya bisa dan mau terbuka akan perbedaan yang ada. Pekerjaan impian saya menjadi seorang desainer interior sekaligus seniman yang bisa membuat perubahan di masa depan, terutama masyarakat Indonesia yang masih berkekurangan. Ilmu saya akan saya terapkan untuk tata ruang yang efektif dan baik bagi tempat tinggal masyarakat Indonesia. Salah satu impian saya juga mendirikan yayasan pendidikan dan keberlanjutan global ^^',
-        accent: 'var(--kuning)', sila: 5
+        accent: 'var(--kuning)', sila: 5, photo: 'img/pfp_aiko.png', absen: '02'
       }
     ];
 
@@ -1227,7 +1256,7 @@
     const memberDesc = document.getElementById('memberDesc');
     const memberCta = document.getElementById('memberCta');
     const memberCtaText = document.getElementById('memberCtaText');
-    const memberPhoto = document.getElementById('memberPhoto');
+    const memberPhotoImg = document.getElementById('memberPhotoImg');
     const memberDots = document.getElementById('memberDots');
     const memberPrev = document.getElementById('memberPrev');
     const memberNext = document.getElementById('memberNext');
@@ -1235,16 +1264,16 @@
 
     function renderMember(i){
       const m = memberData[i];
-      const num = i + 1;
 
       memberCard.style.setProperty('--card-accent', m.accent);
-      memberTag.textContent = `XII-2 / No. ${num}`;
+      memberTag.textContent = `XII-2 / No. ${m.absen}`;
       memberName.textContent = m.name;
       memberMotto.innerHTML = m.motto;
       memberDesc.textContent = m.desc;
       memberCta.href = `sila-${m.sila}.html`;
       memberCtaText.textContent = `Cek Portofolio Sila ${m.sila}`;
-      memberPhoto.textContent = num;
+      memberPhotoImg.src = m.photo;
+      memberPhotoImg.alt = `Foto profil ${m.name}`;
 
       memberFields.innerHTML = `
         <div class="member-field-item"><span class="label">Tempat, Tanggal Lahir</span><span class="value">${m.ttl}</span></div>

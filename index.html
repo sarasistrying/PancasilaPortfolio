@@ -18,6 +18,8 @@
     --gold: #B9924A;
     --gold-soft: #D8C08B;
     --merah: #8C3A32;
+    --biru: #4A6B8A;
+    --ungu: #6B5478;
 
     --font-display: "Anton", sans-serif;
     --font-body: "Plus Jakarta Sans", sans-serif;
@@ -1151,6 +1153,8 @@
     position:relative;
     background: var(--ink);
     --ss-pad-x: clamp(24px, 6vw, 100px);
+    --disc-size: clamp(240px, 34vw, 620px);
+    --disc-nudge: clamp(60px, 10vw, 150px);
     padding: 170px var(--ss-pad-x) 130px;
     overflow:hidden;
   }
@@ -1225,15 +1229,16 @@
     position:relative; z-index:1;
     max-width:1300px; margin:0 auto;
     display:flex; align-items:center; gap:20px;
-    padding-left: clamp(80px, 12vw, 220px);
+    padding-left: calc(var(--disc-nudge) + var(--disc-size) / 2 + 36px - var(--ss-pad-x));
   }
 
   .ss-disc-wrap{
     position:absolute;
-    top:50%; left: calc(-1 * var(--ss-pad-x) + 150px);
+    top:50%; left: calc(-1 * var(--ss-pad-x) + var(--disc-nudge));
     transform: translate(-50%, -50%);
-    width: min(880px, 68vw); aspect-ratio:1;
+    width: var(--disc-size); aspect-ratio:1;
     z-index:1;
+    transition: top 0.3s ease;
   }
 
   .ss-disc-ring{ position:absolute; inset:-24px; width:calc(100% + 48px); height:calc(100% + 48px); overflow:visible; }
@@ -1241,7 +1246,7 @@
   .ss-ring-fill{
     fill:none; stroke: var(--gold); stroke-width:12; stroke-linecap:round;
     transform-origin:center; transform: rotate(-90deg);
-    filter: drop-shadow(0 0 10px currentColor);
+    filter: drop-shadow(0 0 6px currentColor);
   }
 
   .ss-disc{
@@ -1250,7 +1255,16 @@
     box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5), inset 0 0 0 6px rgba(232,236,225,0.06);
     display:flex; align-items:center; justify-content:center;
   }
-  .ss-disc img{ width:78%; height:78%; object-fit:contain; }
+  .ss-disc img{ width:78%; height:78%; object-fit:contain; position:relative; z-index:1; }
+
+  .ss-disc-fill{
+    position:absolute; left:0; right:0; bottom:0; height:0%;
+    background: linear-gradient(0deg, var(--gold) 0%, transparent 100%);
+    opacity:0.26;
+    z-index:2;
+    pointer-events:none;
+    transition: height 1.3s cubic-bezier(0.65, 0, 0.35, 1), background 0.4s ease;
+  }
 
   .ss-info{ flex:1.1; min-width:0; padding: 0 clamp(16px, 3vw, 40px); }
   .ss-info-num{ font-size:14px; letter-spacing:0.22em; text-transform:uppercase; font-weight:700; color: var(--gold-soft); margin-bottom:14px; }
@@ -1533,7 +1547,7 @@
   </section>
 
   <!-- ================= SILA SHOWCASE ================= -->
-  <section class="sila-showcase-section">
+  <section class="sila-showcase-section" id="silaShowcase">
     <div class="ss-glow ss-glow-1"></div>
     <div class="ss-glow ss-glow-2"></div>
     <div class="ss-particles" id="ssParticles"></div>
@@ -1548,7 +1562,7 @@
       </p>
     </div>
 
-    <div class="ss-disc-wrap">
+    <div class="ss-disc-wrap" id="ssDiscWrap">
       <svg class="ss-disc-ring" viewBox="0 0 220 220">
         <circle class="ss-ring-track" id="ssRingTrack" cx="110" cy="110" r="110"></circle>
         <circle class="ss-ring-fill" id="ssRingFill" cx="110" cy="110" r="110"
@@ -1556,10 +1570,11 @@
       </svg>
       <div class="ss-disc">
         <img src="img/logo3.png" alt="Garuda Pancasila">
+        <div class="ss-disc-fill" id="ssDiscFill"></div>
       </div>
     </div>
 
-    <div class="ss-body reveal reveal-delay-2">
+    <div class="ss-body reveal reveal-delay-2" id="ssBody">
       <div class="ss-info">
         <div class="ss-info-num" id="ssInfoNum">Sila I</div>
         <h3 class="ss-info-title" id="ssInfoTitle">Ketuhanan Yang Maha Esa</h3>
@@ -1824,6 +1839,10 @@
     const ssInfoDesc = document.getElementById('ssInfoDesc');
     const ssRingFill = document.getElementById('ssRingFill');
     const ssRingTrack = document.getElementById('ssRingTrack');
+    const ssDiscFill = document.getElementById('ssDiscFill');
+    const silaShowcase = document.getElementById('silaShowcase');
+    const ssDiscWrap = document.getElementById('ssDiscWrap');
+    const ssBody = document.getElementById('ssBody');
     const ringCircumference = 691.2;
 
     silaData.forEach((s, i) => {
@@ -1841,11 +1860,27 @@
       ssList.appendChild(btn);
     });
 
+    function alignDiscVertically(){
+      if (window.innerWidth <= 980) {
+        ssDiscWrap.style.top = '';
+        return;
+      }
+      const sectionRect = silaShowcase.getBoundingClientRect();
+      const bodyRect = ssBody.getBoundingClientRect();
+      const bodyCenterY = (bodyRect.top + bodyRect.height / 2) - sectionRect.top;
+      ssDiscWrap.style.top = `${bodyCenterY}px`;
+    }
+    window.addEventListener('resize', alignDiscVertically);
+    window.addEventListener('load', alignDiscVertically);
+
     function triggerRing(accentColor, fraction){
       const targetOffset = ringCircumference * (1 - fraction);
+      const fillHeight = `${fraction * 100}%`;
 
-      ssRingTrack.style.stroke = `color-mix(in srgb, ${accentColor} 30%, transparent)`;
+      ssRingTrack.style.stroke = `color-mix(in srgb, ${accentColor} 20%, transparent)`;
       ssRingFill.style.color = accentColor;
+      ssDiscFill.style.background = `linear-gradient(0deg, ${accentColor} 0%, color-mix(in srgb, ${accentColor} 20%, transparent) 70%, transparent 100%)`;
+      ssDiscFill.style.height = fillHeight;
 
       if (prefersReducedMotion) {
         ssRingFill.style.stroke = accentColor;
@@ -1881,9 +1916,12 @@
       }, 260);
 
       triggerRing(s.accent, (i + 1) / silaData.length);
+
+      requestAnimationFrame(alignDiscVertically);
     }
 
     selectSila(0);
+    alignDiscVertically();
   </script>
 
 </body>

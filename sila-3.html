@@ -359,6 +359,33 @@
     transition: opacity 0.22s ease;
   }
 
+  .detail-content{
+    display:flex; flex-direction:column; gap:22px;
+  }
+
+  .detail-panel.layout-split{
+    flex-direction: row;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .detail-panel.layout-split .detail-photo{
+    flex: 0 0 min(560px, 48vw);
+    width: min(560px, 48vw);
+    aspect-ratio: 3 / 4;
+    min-height: 0;
+  }
+  .detail-panel.layout-split .detail-content{
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  @media (max-width: 860px){
+    .detail-panel.layout-split{ flex-direction: column; }
+    .detail-panel.layout-split .detail-photo{ width:100%; flex-basis:auto; aspect-ratio: 3 / 4; }
+  }
+
   .detail-photo{
     position:relative;
     border-radius: 22px;
@@ -709,31 +736,33 @@
         </div>
       </div>
 
-      <div class="detail-boxes">
-        <div class="box-pancasila">
-          <h3>Penerapan Pancasila</h3>
-          <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
-        </div>
-        <div class="box-chart">
-          <h3>Kekuatan Sikap &amp; Perilaku</h3>
-          <div class="chart-row">
-            <div class="pie-wrap">
-              <div class="pie-ring"></div>
-              <div class="pie-chart" id="pieChart"></div>
-              <div class="pie-labels" id="pieLabels"></div>
+      <div class="detail-content" id="detailContent">
+        <div class="detail-boxes">
+          <div class="box-pancasila">
+            <h3>Penerapan Pancasila</h3>
+            <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
+          </div>
+          <div class="box-chart">
+            <h3>Kekuatan Sikap &amp; Perilaku</h3>
+            <div class="chart-row">
+              <div class="pie-wrap">
+                <div class="pie-ring"></div>
+                <div class="pie-chart" id="pieChart"></div>
+                <div class="pie-labels" id="pieLabels"></div>
+              </div>
+              <ul class="chart-legend" id="chartLegend"></ul>
             </div>
-            <ul class="chart-legend" id="chartLegend"></ul>
           </div>
         </div>
-      </div>
 
-      <div class="detail-strip" id="stripDiri">
-        <span class="ds-label">Dampak bagi Diri Sendiri</span>
-        <p id="dampakDiri"></p>
-      </div>
-      <div class="detail-strip" id="stripOrang">
-        <span class="ds-label">Dampak bagi Orang Sekitar</span>
-        <p id="dampakOrang"></p>
+        <div class="detail-strip" id="stripDiri">
+          <span class="ds-label">Dampak bagi Diri Sendiri</span>
+          <p id="dampakDiri"></p>
+        </div>
+        <div class="detail-strip" id="stripOrang">
+          <span class="ds-label">Dampak bagi Orang Sekitar</span>
+          <p id="dampakOrang"></p>
+        </div>
       </div>
     </div>
   </section>
@@ -882,12 +911,12 @@
         accent: 'var(--sawah)'
       },
       masyarakat: {
-        label: 'Masyarakat', img: 'img/sila3/dokummasyarakat.jpeg',
-        title: 'Ikut Serta dalam Kerja Bakti Lingkungan',
-        pancasila: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent libero sed cursus ante dapibus diam nec odio.',
-        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',6], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Melatih kerja sama dan kepedulian lingkungan.',
-        orang: 'Mempererat hubungan antarwarga sekitar.',
+        label: 'Masyarakat', img: 'img/sila3/dokummasyarakat.png',
+        title: 'Membuat dan Menyebarkan Poster Keberagaman',
+        pancasila: 'Mengajak masyarakat untuk merayakan keberagaman suku, budaya, dan agama melalui media visual yang mudah dipahami dan disebarluaskan secara luas.',
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',9], ['Tanggung Jawab',8], ['Toleransi',8] ],
+        diri: 'Melatih kreativitas dalam menyampaikan pesan persatuan serta lebih peka terhadap isu keberagaman di sekitar.',
+        orang: 'Menumbuhkan kesadaran masyarakat akan pentingnya toleransi dan persatuan di tengah keberagaman.',
         accent: 'var(--merah)'
       },
       bangsa: {
@@ -940,6 +969,8 @@
 
     function renderCategory(key){
       const d = catData[key];
+
+      detailPanel.classList.toggle('layout-split', key === 'bangsa');
 
       detailPhotoImg.src = d.img;
       detailPhoto.style.setProperty('--accent', d.accent);
