@@ -717,7 +717,43 @@
   }
   .member-fields-grid .value{ display:block; font-size:13.5px; font-weight:600; color:#2C332C; line-height:1.4; }
 
-  .member-description{ font-size:13.5px; line-height:1.75; color:#4B534A; margin-bottom:28px; }
+  .member-description{ font-size:13.5px; line-height:1.75; color:#4B534A; margin-bottom:24px; }
+
+  .member-chart-box{
+    background: linear-gradient(160deg, #F4E8CB 0%, #E9D2A0 100%);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 28px;
+  }
+  .member-chart-box h4{
+    font-family: var(--font-display); font-weight:400; letter-spacing:0.02em;
+    color: #6B4F22; font-size: 16px; margin-bottom: 16px;
+  }
+  .member-chart-row{ display:flex; align-items:center; gap: 22px; flex-wrap:wrap; }
+
+  .member-pie-wrap{
+    position:relative; width:110px; height:110px; flex-shrink:0;
+    animation: memberPieSpin 22s linear infinite;
+  }
+  @keyframes memberPieSpin{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .member-pie-wrap{ animation:none; } }
+  .member-pie-ring{
+    position:absolute; inset:0; border-radius:50%;
+    border: 2px dashed var(--card-accent); opacity:0.55;
+  }
+  .member-pie-chart{
+    position:absolute; inset:7px; border-radius:50%;
+    -webkit-mask-image: radial-gradient(circle, transparent 26px, #000 27px);
+    mask-image: radial-gradient(circle, transparent 26px, #000 27px);
+    filter: drop-shadow(0 10px 14px rgba(23,36,28,0.35));
+    transition: background 0.3s ease;
+  }
+
+  .member-chart-legend{ list-style:none; display:flex; flex-direction:column; gap:8px; flex:1; min-width:150px; }
+  .member-chart-legend li{ display:flex; align-items:center; gap:7px; font-size:11.5px; font-weight:600; color:#3A2F17; }
+  .member-legend-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .member-legend-name{ flex:1; }
+  .member-legend-val{ font-weight:800; }
 
   .member-cta{
     display:inline-flex; align-items:center; gap:10px;
@@ -780,6 +816,8 @@
   @media (max-width: 820px){
     .member-card{ flex-direction:column-reverse; text-align:center; gap:28px; padding:40px 26px; }
     .member-fields-grid{ text-align:left; }
+    .member-chart-row{ justify-content:center; }
+    .member-chart-legend{ text-align:left; }
     .member-card-right{ width:180px; }
     .member-nav-arrow{ width:44px; height:44px; }
   }
@@ -1052,6 +1090,17 @@
 
           <p class="member-description" id="memberDesc"></p>
 
+          <div class="member-chart-box">
+            <h4>Kekuatan Sikap &amp; Perilaku</h4>
+            <div class="member-chart-row">
+              <div class="member-pie-wrap">
+                <div class="member-pie-ring"></div>
+                <div class="member-pie-chart" id="memberPieChart"></div>
+              </div>
+              <ul class="member-chart-legend" id="memberChartLegend"></ul>
+            </div>
+          </div>
+
           <a href="sila-1.html" class="member-cta" id="memberCta">
             <span id="memberCtaText">Cek Portofolio Sila 1</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1289,39 +1338,52 @@
         ttl: 'Jakarta. 17 Desember 2008', alamat: 'Jln Bintara 17 kav Tower no 131 Rt 002/013',
         tokoh: 'Bunda Teresa', buku: 'The Alpha Girls',
         desc: 'Bunda teresa mengajarkan kita untuk saling mengasihi tanpa memandang latar belakang,agama,atau pun suku.',
-        accent: 'var(--gold)', sila: 1, photo: 'img/pfp_claresta.png', absen: '08'
+        accent: 'var(--gold)', sila: 1, photo: 'img/pfp_claresta.png', absen: '08',
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',8], ['Toleransi',9] ]
       },
       {
         name: 'Kezia Siregar', motto: '&ldquo;All things great are wound of with all things little.&rdquo;',
         ttl: 'Jakarta, 2 November 2009', alamat: 'Jl. Arabika Raya Blok U3 No. 4',
         tokoh: 'Malala Yousafzai', buku: 'Anne of Green Gables',
         desc: 'Memiliki semangat untuk terus belajar dan memperluas wawasan agar dapat menjadi pribadi yang mandiri, bijaksana, dan bermanfaat bagi keluarga serta masyarakat. Berusaha mengamalkan nilai-nilai Pancasila melalui kerja keras, tanggung jawab, dan kepedulian terhadap sesama.',
-        accent: 'var(--sawah)', sila: 2, photo: 'img/pfp_kezia.png', absen: '23'
+        accent: 'var(--sawah)', sila: 2, photo: 'img/pfp_kezia.png', absen: '23',
+        levels: [ ['Kejujuran',8], ['Komitmen',9], ['Kreativitas',7], ['Tanggung Jawab',8], ['Toleransi',8] ]
       },
       {
         name: 'Komang Saraswati Vidya Kesawa', motto: '&ldquo;You Just Need Someone to be Brave For&rdquo;',
         ttl: 'Leicester, 10 Maret 2009', alamat: 'Jl. Elang Thainesia 2 No. 11/C2',
         tokoh: 'Alyssa Liu', buku: 'Harry Potter and the Philosopher\'s Stone',
         desc: 'Jalan yang dapat diambil itu banyak, namun usaha yang dituangkan adalah kunci untuk mencapai tujuan. Sehingga jangan minder ketika ujung jalan belum pasti, karena semua ada hasilnya.',
-        accent: 'var(--sawah-light)', sila: 3, photo: 'img/pfp_saras.png', absen: '24'
+        accent: 'var(--sawah-light)', sila: 3, photo: 'img/pfp_saras.png', absen: '24',
+        levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',9], ['Toleransi',8] ]
       },
       {
         name: 'Sabria Caroline Ginting', motto: '&ldquo;Setiap lompatan hidup bisa dilewat, hanya perlu kesabaran dan waktu yang tepat.&rdquo;',
         ttl: 'Jakarta, 10 Juni 2009', alamat: 'Jl. Merpati No.9, RT.003/RW.002, Jatimakmur, Pondok Gede',
         tokoh: 'Liam Layton (The Plant Slant)', buku: 'Buku Sherlock Holmes',
         desc: 'Mau terbuka dan belajar tentang perubahan-perubahan yang ada di dunia, tetapi mengikuti yang berdasar pancasila. Ingin lebih mendalami pancasila dan melakukannya dengan sepenuh hati saya untuk sendiri dan sesama.',
-        accent: 'var(--biru)', sila: 4, photo: 'img/pfp_sabria.png', absen: '31'
+        accent: 'var(--biru)', sila: 4, photo: 'img/pfp_sabria.png', absen: '31',
+        levels: [ ['Kejujuran',7], ['Komitmen',8], ['Kreativitas',8], ['Tanggung Jawab',7], ['Toleransi',9] ]
       },
       {
         name: 'Aiko Zaneta Lumban Tobing', motto: '&ldquo;Bersatu kita teguh.&rdquo;',
         ttl: 'Jakarta, 13 Oktober 2008', alamat: 'Jl. SMA 48 RT.10 RW.01 Pinang Ranti, Makasar',
         tokoh: 'Hayao Miyazaki ', buku: 'Howl\'s Moving Castle',
         desc: 'Deskripsi diri: Saya bisa dan mau terbuka akan perbedaan yang ada. Pekerjaan impian saya menjadi seorang desainer interior sekaligus seniman yang bisa membuat perubahan di masa depan, terutama masyarakat Indonesia yang masih berkekurangan. Ilmu saya akan saya terapkan untuk tata ruang yang efektif dan baik bagi tempat tinggal masyarakat Indonesia. Salah satu impian saya juga mendirikan yayasan pendidikan dan keberlanjutan global ^^',
-        accent: 'var(--kuning)', sila: 5, photo: 'img/pfp_aiko.png', absen: '02'
+        accent: 'var(--kuning)', sila: 5, photo: 'img/pfp_aiko.png', absen: '02',
+        levels: [ ['Kejujuran',8], ['Komitmen',7], ['Kreativitas',9], ['Tanggung Jawab',7], ['Toleransi',8] ]
       }
     ];
 
     let memberIndex = 0;
+
+    const metricColors = {
+      'Kejujuran': 'var(--gold)',
+      'Komitmen': 'var(--sawah)',
+      'Kreativitas': 'var(--biru)',
+      'Tanggung Jawab': 'var(--merah)',
+      'Toleransi': 'var(--ungu)'
+    };
 
     const memberCard = document.getElementById('memberCard');
     const memberTag = document.getElementById('memberTag');
@@ -1329,6 +1391,8 @@
     const memberMotto = document.getElementById('memberMotto');
     const memberFields = document.getElementById('memberFields');
     const memberDesc = document.getElementById('memberDesc');
+    const memberPieChart = document.getElementById('memberPieChart');
+    const memberChartLegend = document.getElementById('memberChartLegend');
     const memberCta = document.getElementById('memberCta');
     const memberCtaText = document.getElementById('memberCtaText');
     const memberPhotoImg = document.getElementById('memberPhotoImg');
@@ -1356,6 +1420,24 @@
         <div class="member-field-item"><span class="label">Tokoh Favorit</span><span class="value">${m.tokoh}</span></div>
         <div class="member-field-item"><span class="label">Buku Favorit</span><span class="value">${m.buku}</span></div>
       `;
+
+      const total = m.levels.reduce((sum, l) => sum + l[1], 0);
+      let cursor = 0;
+      const stops = m.levels.map(([name, val]) => {
+        const pct = (val / total) * 100;
+        const stop = `${metricColors[name]} ${cursor}% ${cursor + pct}%`;
+        cursor += pct;
+        return stop;
+      });
+      memberPieChart.style.background = `conic-gradient(${stops.join(', ')})`;
+
+      memberChartLegend.innerHTML = m.levels.map(([name, val]) => `
+        <li>
+          <span class="member-legend-dot" style="background:${metricColors[name]}"></span>
+          <span class="member-legend-name">${name}</span>
+          <span class="member-legend-val">${val}/10</span>
+        </li>
+      `).join('');
 
       memberDots.querySelectorAll('.member-dot').forEach((dot, idx) => {
         dot.classList.toggle('is-active', idx === i);
