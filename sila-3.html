@@ -504,6 +504,16 @@
   }
   .ds-label{ font-size:12px; letter-spacing:0.16em; text-transform:uppercase; font-weight:800; color: var(--accent); }
   .detail-strip p{ font-size:16px; line-height:1.75; color:#33392F; }
+  .detail-strip ul{ list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .detail-strip li{
+    font-size:16px; line-height:1.55; color:#33392F;
+    padding-left:22px; position:relative;
+  }
+  .detail-strip li::before{
+    content:""; position:absolute; left:0; top:0.6em;
+    width:7px; height:7px; border-radius:50%;
+    background: var(--accent);
+  }
 
   /* ---------- FOOTER ---------- */
   .site-footer{ background: var(--ink); color: var(--mist); padding: 74px clamp(24px, 6vw, 100px) 30px; }
@@ -753,11 +763,11 @@
 
         <div class="detail-strip" id="stripDiri">
           <span class="ds-label">Dampak bagi Diri Sendiri</span>
-          <p id="dampakDiri"></p>
+          <ul id="dampakDiri"></ul>
         </div>
         <div class="detail-strip" id="stripOrang">
           <span class="ds-label">Dampak bagi Orang Sekitar</span>
-          <p id="dampakOrang"></p>
+          <ul id="dampakOrang"></ul>
         </div>
       </div>
     </div>
@@ -910,37 +920,69 @@
       rumah: {
         label: 'Rumah', img: 'img/sila3/dokumrumah.jpeg',
         title: 'Membersihkan Lingkungan Rumah untuk Kenyamanan Bersama',
-        pancasila: 'Dengan aktif merawat lingkungan sekitar rumah, tamu, tetangga, keluarga, dan bahkan diri sendiri akan merasa lebih nyaman saat beristirahat di rumah. Sila ketiga menjunjung tinggi kebersamaan antar warga nasional. Sehingga, membersihkan daerah sekitar rumah dapat menyatukan kembali relasi dengan orang lain karena rumah berasa enak dan welcoming.',
+        pancasila: 'Dengan aktif merawat lingkungan sekitar rumah, tamu, tetangga, keluarga, dan bahkan diri sendiri akan merasa lebih nyaman saat beristirahat di rumah. Sila ketiga menjunjung tinggi kebersamaan antar warga, sehingga membersihkan daerah sekitar rumah dapat menyatukan kembali relasi dengan orang lain karena rumah terasa nyaman dan welcoming.',
         levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',7], ['Toleransi',8] ],
-        diri: 'Membuat lingkungan tempat tinggal lebih nyaman, tetangga memiliki persepsi yang lebih positif dari diri kita, rasa tali persaudaraan lebih erat dan kita lebih dekat dengan tetangga sekitar.',
-        orang: 'Merasa lingkungan tempat tinggal bersih dan enak dilihat, cenderung mengikuti gerakan menjaga area perumahan, ikut menjalin tali persaudaraan dengan tetangga sekitar juga.',
+        diri: [
+          'Membuat area rumah sendiri nyaman untuk beristirahat',
+          'Menanamkan rasa peduli untuk kebersihan dan kerapihan',
+          'Mengembangkan skill menjaga kebersihan untuk ke depannya'
+        ],
+        orang: [
+          'Orang lain yang main ke rumah merasa nyaman dan suka berkunjung',
+          'Orang lain atau tamu merasa dihargai',
+          'Bisa jadi inspirasi untuk mereka juga'
+        ],
         accent: 'var(--gold)'
       },
       sekolah: {
         label: 'Sekolah', img: 'img/sila3/dokumsekolah.jpeg',
         title: 'Berteman dengan Teman meski Berbeda Ras, Suku, dan Budaya',
-        pancasila: 'Tidak memandang beda teman yang berbeda ras, suku, atau budaya karena kita semua belajar di sekolah yang sama dan negara yang sama.',
+        pancasila: 'Pertemanan di sekolah sudah pasti beragam karena kita tiap hari bertemu dengan warga sekolah yang berbeda agama, suku, ras, dan budaya. Penting untuk menghargai perbedaan tersebut dan tidak membuatnya menjadi penghalang dalam relasi pertemanan tersebut. Sila ketiga menyatakan bahwa kita memiliki derajat yang sama sebagai warga negara Indonesia, sehingga tidak ada yang lebih maupun kurang.',
         levels: [ ['Kejujuran',9], ['Komitmen',8], ['Kreativitas',5], ['Tanggung Jawab',8], ['Toleransi',7] ],
-        diri: 'Lebih menghargai perbedaan dan membangun hubungan yang positif dengan teman dari latar belakang yang berbeda.',
-        orang: 'Meningkatkan rasa toleransi dan kebersamaan dalam lingkungan sekolah.',
+        diri: [
+          'Melatih rasa simpati dan empati pada orang lain',
+          'Kesempatan belajar budaya orang lain',
+          'Menguatkan relasi dan networking'
+        ],
+        orang: [
+          'Merasa dihargai dan diapresiasi',
+          'Dapat membangun relasi dan networking juga',
+          'Dapat belajar budaya orang lain juga'
+        ],
         accent: 'var(--sawah)'
       },
       masyarakat: {
         label: 'Masyarakat', img: 'img/sila3/dokummasyarakat.png',
         title: 'Membuat dan Menyebarkan Poster Keberagaman',
-        pancasila: 'Mengajak masyarakat untuk merayakan keberagaman suku, budaya, dan agama melalui media visual yang mudah dipahami dan disebarluaskan secara luas.',
+        pancasila: 'Poster adalah media visual yang sederhana namun mampu menjangkau banyak orang sekaligus, mulai dari lingkungan RT hingga media sosial. Dengan menampilkan gambar dan pesan tentang keberagaman suku, agama, dan budaya, masyarakat diajak untuk merayakan perbedaan alih-alih menjadikannya sumber perpecahan. Sila ketiga mengajarkan bahwa persatuan Indonesia justru lahir dari keberagaman yang dirayakan bersama, bukan dari keseragaman yang dipaksakan.',
         levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',9], ['Tanggung Jawab',8], ['Toleransi',8] ],
-        diri: 'Melatih kreativitas dalam menyampaikan pesan persatuan serta lebih peka terhadap isu keberagaman di sekitar.',
-        orang: 'Menumbuhkan kesadaran masyarakat akan pentingnya toleransi dan persatuan di tengah keberagaman.',
+        diri: [
+          'Melatih kreativitas dalam mengemas pesan persatuan lewat visual yang menarik',
+          'Semakin peka terhadap isu keberagaman di lingkungan sekitar',
+          'Belajar menyampaikan gagasan secara ringkas dan mudah dipahami orang lain'
+        ],
+        orang: [
+          'Masyarakat lebih sadar akan pentingnya toleransi dan persatuan',
+          'Poster bisa jadi pengingat sederhana di ruang publik yang sering dilihat',
+          'Mendorong warga lain untuk ikut merayakan keberagaman di lingkungannya'
+        ],
         accent: 'var(--merah)'
       },
       bangsa: {
         label: 'Bangsa & Negara', img: 'img/sila3/dokumnegara.jpeg',
         title: 'Menggambar Baju Adat Nusantara untuk Media Sosial',
-        pancasila: 'Mengharumkan nama bangsa Indonesia melalui ekspresi kreatif dalam lingkup internasional dengan mengenalkan budaya negara lewat postingan media sosial.',
+        pancasila: 'Media sosial menjadi jembatan yang mempertemukan budaya Indonesia dengan audiens yang jauh lebih luas, bahkan hingga ke luar negeri. Dengan menggambar dan membagikan baju adat dari berbagai daerah, kekayaan budaya Nusantara dapat dikenalkan sekaligus dilestarikan dalam bentuk yang relevan dengan generasi muda. Sila ketiga mengingatkan bahwa persatuan Indonesia dibangun dari beragam budaya daerah yang justru menjadi kekuatan, bukan kelemahan, bagi bangsa.',
         levels: [ ['Kejujuran',8], ['Komitmen',8], ['Kreativitas',7], ['Tanggung Jawab',7], ['Toleransi',8] ],
-        diri: 'Melatih kemampuan sendiri dan jadi lebih mengenali budaya yang ada di Indonesia.',
-        orang: 'Mengenal budaya dan tradisi yang ada di Indonesia.',
+        diri: [
+          'Melatih kemampuan menggambar sekaligus riset tentang budaya daerah',
+          'Semakin mengenal dan menghargai kekayaan budaya Indonesia sendiri',
+          'Menemukan cara baru untuk berkontribusi bagi bangsa lewat karya kreatif'
+        ],
+        orang: [
+          'Orang lain, termasuk dari luar negeri, jadi lebih mengenal budaya Indonesia',
+          'Membantu melestarikan baju adat agar tidak dilupakan generasi muda',
+          'Menumbuhkan rasa bangga bersama terhadap kekayaan budaya bangsa'
+        ],
         accent: 'var(--biru)'
       }
     };
@@ -977,8 +1019,8 @@
       dptRight.textContent = words.slice(mid).join(' ');
 
       pancasilaDesc.textContent = d.pancasila;
-      dampakDiri.textContent = d.diri;
-      dampakOrang.textContent = d.orang;
+      dampakDiri.innerHTML = d.diri.map((pt) => `<li>${pt}</li>`).join('');
+      dampakOrang.innerHTML = d.orang.map((pt) => `<li>${pt}</li>`).join('');
 
       stripDiri.style.setProperty('--accent', d.accent);
       stripOrang.style.setProperty('--accent', d.accent);
