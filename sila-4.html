@@ -471,9 +471,8 @@
   }
 
   .detail-boxes{
-    display:grid; grid-template-columns: 1fr 1fr; gap:28px;
+    display:block;
   }
-  @media (max-width: 760px){ .detail-boxes{ grid-template-columns: 1fr; } }
 
   .box-pancasila{
     background: linear-gradient(160deg, #2B4A34 0%, var(--ink) 100%);
@@ -487,64 +486,6 @@
   }
   .box-pancasila p{ font-size:16px; line-height:1.85; opacity:0.9; }
 
-  .box-chart{
-    background: linear-gradient(160deg, #F4E8CB 0%, #E9D2A0 100%);
-    color: var(--ink);
-    border-radius: 22px;
-    padding: 40px 36px;
-  }
-  .box-chart h3{
-    font-family: var(--font-display); font-weight:400; letter-spacing:0.02em;
-    color: #6B4F22; font-size: 24px; margin-bottom: 26px;
-  }
-  .chart-row{ display:flex; align-items:center; gap: 32px; flex-wrap:wrap; }
-
-  .pie-wrap{
-    position:relative; width:190px; height:190px; flex-shrink:0;
-    animation: pieSpin 22s linear infinite;
-    will-change: transform;
-  }
-  @keyframes pieSpin{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce){ .pie-wrap{ animation:none; } }
-  .pie-ring{
-    position:absolute; inset:0;
-    border-radius:50%;
-    border: 2px dashed var(--accent, var(--biru));
-    opacity:0.55;
-  }
-  .pie-chart{
-    position:absolute; inset:12px;
-    border-radius:50%;
-    -webkit-mask-image: radial-gradient(circle, transparent 46px, #000 47px);
-    mask-image: radial-gradient(circle, transparent 46px, #000 47px);
-    filter: drop-shadow(0 16px 20px rgba(23,36,28,0.4));
-    transition: background 0.3s ease;
-  }
-  .pie-labels{ position:absolute; inset:12px; pointer-events:none; }
-  .pie-label{
-    position:absolute; top:0; left:0;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-body);
-    font-size: 12px; font-weight:800; letter-spacing:0.03em;
-    color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.45);
-    pointer-events:none;
-    animation: pieLabelCounterSpin 22s linear infinite;
-    will-change: transform;
-  }
-  @keyframes pieLabelCounterSpin{
-    from{ transform: translate(-50%, -50%) rotate(0deg); }
-    to{ transform: translate(-50%, -50%) rotate(-360deg); }
-  }
-  @media (prefers-reduced-motion: reduce){ .pie-label{ animation:none; } }
-
-  .chart-legend{ list-style:none; display:flex; flex-direction:column; gap:14px; flex:1; min-width:190px; }
-  .chart-legend li{ display:flex; flex-direction:column; gap:6px; }
-  .legend-top{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:#3A2F17; }
-  .legend-dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
-  .legend-name{ flex:1; }
-  .legend-val{ font-weight:800; }
-  .legend-bar{ height:6px; border-radius:4px; background: rgba(23,36,28,0.12); overflow:hidden; }
-  .legend-bar-fill{ height:100%; border-radius:4px; transition: width 0.4s ease, background 0.3s ease; }
 
   .detail-strip{
     --accent: var(--gold);
@@ -804,17 +745,6 @@
             <h3>Penerapan Pancasila</h3>
             <p id="pancasilaDesc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante dapibus diam.</p>
           </div>
-          <div class="box-chart">
-            <h3>Kekuatan Sikap &amp; Perilaku</h3>
-            <div class="chart-row">
-              <div class="pie-wrap">
-                <div class="pie-ring"></div>
-                <div class="pie-chart" id="pieChart"></div>
-                <div class="pie-labels" id="pieLabels"></div>
-              </div>
-              <ul class="chart-legend" id="chartLegend"></ul>
-            </div>
-          </div>
         </div>
 
         <div class="detail-strip" id="stripDiri">
@@ -1012,22 +942,6 @@
       }
     };
 
-    const metricColors = {
-      'Kejujuran': 'var(--gold)',
-      'Komitmen': 'var(--sawah)',
-      'Kreativitas': 'var(--biru)',
-      'Tanggung Jawab': 'var(--merah)',
-      'Toleransi': 'var(--ungu)'
-    };
-
-    const metricAbbr = {
-      'Kejujuran': 'KEJ',
-      'Komitmen': 'KOM',
-      'Kreativitas': 'KRE',
-      'Tanggung Jawab': 'TJ',
-      'Toleransi': 'TOL'
-    };
-
     const catButtons = document.querySelectorAll('.cat-icon-btn');
     const heroImages = document.querySelectorAll('.hero-media-img');
     const heroCatLabel = document.getElementById('heroCatLabel');
@@ -1040,10 +954,6 @@
     const dptLeft = document.getElementById('dptLeft');
     const dptRight = document.getElementById('dptRight');
     const pancasilaDesc = document.getElementById('pancasilaDesc');
-    const pieChart = document.getElementById('pieChart');
-    const pieWrap = document.querySelector('.pie-wrap');
-    const pieLabels = document.getElementById('pieLabels');
-    const chartLegend = document.getElementById('chartLegend');
     const dampakDiri = document.getElementById('dampakDiri');
     const dampakOrang = document.getElementById('dampakOrang');
     const stripDiri = document.getElementById('stripDiri');
@@ -1069,42 +979,6 @@
 
       stripDiri.style.setProperty('--accent', d.accent);
       stripOrang.style.setProperty('--accent', d.accent);
-      pieWrap.style.setProperty('--accent', d.accent);
-
-      const total = d.levels.reduce((sum, l) => sum + l[1], 0);
-      const cx = 83, cy = 83, labelRadius = 65; // matches .pie-chart geometry (166px, ring band ~46-83px)
-      let cursor = 0;
-      const stops = [];
-      const labels = [];
-
-      d.levels.forEach(([name, val], i) => {
-        const pct = (val / total) * 100;
-        stops.push(`${metricColors[name]} ${cursor}% ${cursor + pct}%`);
-
-        const midDeg = (cursor + pct / 2) / 100 * 360;
-        const rad = midDeg * Math.PI / 180;
-        const x = cx + labelRadius * Math.sin(rad);
-        const y = cy - labelRadius * Math.cos(rad);
-        labels.push(`<span class="pie-label" style="left:${x}px; top:${y}px;">${metricAbbr[name]}</span>`);
-
-        cursor += pct;
-      });
-
-      pieChart.style.background = `conic-gradient(${stops.join(', ')})`;
-      pieLabels.innerHTML = labels.join('');
-
-      chartLegend.innerHTML = d.levels.map(([name, val]) => `
-        <li>
-          <div class="legend-top">
-            <span class="legend-dot" style="background:${metricColors[name]}"></span>
-            <span class="legend-name">${name}</span>
-            <span class="legend-val">${val}/10</span>
-          </div>
-          <div class="legend-bar">
-            <div class="legend-bar-fill" style="width:${val * 10}%; background:${metricColors[name]}"></div>
-          </div>
-        </li>
-      `).join('');
     }
 
     catButtons.forEach((btn) => {
